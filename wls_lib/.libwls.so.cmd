@@ -1,0 +1,1 @@
+cmd_libwls.so = icc -Wl,-export-dynamic -Wl,-export-dynamic -L/home/obi/odu-low/phy/wls_lib/lib -L/home/obi/DPDK/dpdk-19.11/x86_64-native-linuxapp-icc/lib   -shared -o libwls.so wls_lib_dpdk.o syslib.o  
