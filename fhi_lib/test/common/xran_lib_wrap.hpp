@@ -962,7 +962,7 @@ public:
         {
             for(j=0; j<XRAN_N_FE_BUF_LEN; j++)
             {
-                for(z = 0; z < xran_max_antenna_nr; z++){
+                for(z = 0; z < XRAN_MAX_ANTENNA_NR; z++){
                     pFthTxBuffer[i][z][j]       = NULL;
                     pFthTxPrbMapBuffer[i][z][j] = NULL;
                     pFthRxBuffer[i][z][j]       = NULL;
