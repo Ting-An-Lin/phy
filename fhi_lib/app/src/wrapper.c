@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
                       (void *)xran_fh_rx_callback, 
                       (void *)xran_fh_rx_prach_callback, 
                       (void *)xran_fh_srs_callback);
+	xranlib->Start();
 }
 
 
