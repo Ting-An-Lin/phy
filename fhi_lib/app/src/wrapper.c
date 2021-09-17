@@ -31,11 +31,48 @@
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
     return;
 }
+
 void xran_fh_srs_callback(void *pCallbackTag, xran_status_t status){
     return;
 }
-void xran_fh_rx_prach_callback(void *pCallbackTag, xran_status_t status){
-    rte_pause();
+
+void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
+	
+	if(status!=XRAN_STATUS_SUCCESS){
+		return -1;
+	}
+	
+	// pCallbackTag is a structure which contains the timing and the cell id
+	struct xran_cb_tag *pTag = (xran_cb_tag *)pCallbackTag;
+	uint16_t cell_id = pTag->cellId;
+	uint32_t tti = pTag->slotiId;
+	uint32_t symbol = pTag->symbol;
+	
+	// Retrieve the device context which contains information to access the buffer
+	struct xran_device_ctx *p_xran_dev_ctx = xran_dev_get_ctx();
+	
+	/* The slot and the cell id are fixed
+	 * We also know the start symbol and that we have to read half a slot
+	 */
+
+	// Loop over the antennas
+	for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
+		
+		// Loop over the symbols
+		for(uint32_t symb_id = symbol; symb_id<symbol+7; symb_id++){
+			
+			uint32_t nElementLenInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nElementLenInBytes;
+			uint32_t nNumberOfElements = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nNumberOfElements;
+			uint32_t nOffsetInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nOffsetInBytes;
+			uint32_t nIsPhyAddr = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nIsPhyAddr;
+			uint8_t *pData = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pData;
+			void *pCtrl = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pCtrl;
+			
+		}
+		
+	}
+	
+    return;
 }
 
 int main(int argc, char *argv[]){
