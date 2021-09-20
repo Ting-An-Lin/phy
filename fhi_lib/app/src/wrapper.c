@@ -28,6 +28,16 @@
 #include "xran_lib_wrap.hpp"
 #include "common.hpp"
 
+// Number of bytes per symbol
+#define SYMBOL_DATA_SIZE 13168
+//Size in symbols of the intermediate buffer
+#define SYMBOL_BUFFER_LEN 112 // =1 sub-frame
+
+// Intermediate Buffer
+uint8_t symbol_data_buffer[SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
+// Intermediate Buffer Index
+int symbol_in_symbol_data_buffer=0;
+
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
     return;
 }
@@ -67,6 +77,17 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 			uint32_t nIsPhyAddr = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nIsPhyAddr;
 			uint8_t *pData = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pData;
 			void *pCtrl = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pCtrl;
+			
+			// Copy data to Intermediate Buffer
+			for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
+				symbol_data_buffer[symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
+			}
+			
+			// Increment Intermediate Buffer Index
+			symbol_in_symbol_data_buffer=symbol_in_symbol_data_buffer+1;
+			if (symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
+				symbol_in_symbol_data_buffer=0;
+			}
 			
 		}
 		
