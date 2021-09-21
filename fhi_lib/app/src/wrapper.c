@@ -96,14 +96,26 @@ void send_intermediate_buffer_symbol(){
 			int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
 			
 			for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
-			
+				
+				uint8_t *pData = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[sym_idx%XRAN_NUM_OF_SYMBOL_PER_SLOT].pData;
+				void *pCtrl = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[sym_idx%XRAN_NUM_OF_SYMBOL_PER_SLOT].pCtrl;
+				
 				// TODO:
 				// Build headers
-				// Write to buffer
+				// Write headers
+				
+				// Copy data to Intermediate Buffer
+				for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
+					pData[byte_index]=symbol_data_buffer[cell_id][ant_id][read_symbol_in_symbol_data_buffer][byte_index];
+				}
 			
 			}
 			
+			// Increment Buffers Indexes
 			read_symbol_in_symbol_data_buffer[cell_id]=read_symbol_in_symbol_data_buffer[cell_id]+1;
+			if (read_symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
+				read_symbol_in_symbol_data_buffer=0;
+			}
 			previous_sent_symbol[cell_id]=sym;
 			
 		}
