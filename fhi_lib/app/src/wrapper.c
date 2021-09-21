@@ -104,7 +104,7 @@ void send_intermediate_buffer_symbol(){
 				// Build headers
 				// Write headers
 				
-				// Copy data to Intermediate Buffer
+				// Copy data from Intermediate Buffer
 				for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
 					pData[byte_index]=symbol_data_buffer[cell_id][ant_id][read_symbol_in_symbol_data_buffer][byte_index];
 				}
