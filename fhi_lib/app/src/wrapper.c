@@ -35,8 +35,63 @@
 
 // Intermediate Buffer
 uint8_t symbol_data_buffer[SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
-// Intermediate Buffer Index
-int symbol_in_symbol_data_buffer=0;
+// Intermediate Buffer Write Index
+int write_symbol_in_symbol_data_buffer=0;
+// Intermediate Buffer Read Index
+int read_symbol_in_symbol_data_buffer=0;
+
+// device context
+struct xran_device_ctx *p_xran_dev_ctx;
+
+int32_t get_current_tx_symbol_id(){
+	
+	// Retrieve the device context which contains information to access the buffer
+	p_xran_dev_ctx = xran_dev_get_ctx();
+	
+	int32_t ota_sym = xran_lib_ota_sym_idx;									// declared extern in xran_lib_wrap.hpp
+	int32_t off_sym = p_xran_dev_ctx->sym_up;								// symbol offset of TX at DU with respect to OTA time
+	
+	// the symbol index is reset every period (1 second=1000 ms=1000 sub-frames)
+	int32_t max_sym = XRAN_NUM_OF_SYMBOL_PER_SLOT*SLOTNUM_PER_SUBFRAME*1000;
+	
+	int32_t sym = ota_sym - off_sym;
+	
+	if(sym>=max_sym){
+		sym-=max_sym;
+	}
+	
+	if(sym<0){
+		sym+=max_sym;
+	}
+	
+	return sym;
+	
+}
+
+void send_intermediate_buffer_symbol(){
+	
+	// Retrieve the device context which contains information to access the buffer
+	p_xran_dev_ctx = xran_dev_get_ctx();
+	
+	if(write_symbol_in_symbol_data_buffer!=read_symbol_in_symbol_data_buffer){	// There are symbols to read
+		
+		int32_t sym = get_current_tx_symbol_id();
+		
+		int32_t tti = sym / XRAN_NUM_OF_SYMBOL_PER_SLOT;
+		int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
+		
+		// TODO:
+		// Build headers
+		// Write to buffer
+		
+	}
+	
+	// TODO:
+	// Sleep 1 symbol
+	
+	return;
+	
+}
 
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
     return;
@@ -59,7 +114,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 	uint32_t symbol = pTag->symbol;
 	
 	// Retrieve the device context which contains information to access the buffer
-	struct xran_device_ctx *p_xran_dev_ctx = xran_dev_get_ctx();
+	p_xran_dev_ctx = xran_dev_get_ctx();
 	
 	/* The slot and the cell id are fixed
 	 * We also know the start symbol and that we have to read half a slot
@@ -80,13 +135,13 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 			
 			// Copy data to Intermediate Buffer
 			for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
-				symbol_data_buffer[symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
+				symbol_data_buffer[write_symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
 			}
 			
 			// Increment Intermediate Buffer Index
-			symbol_in_symbol_data_buffer=symbol_in_symbol_data_buffer+1;
-			if (symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
-				symbol_in_symbol_data_buffer=0;
+			write_symbol_in_symbol_data_buffer=symbol_in_symbol_data_buffer+1;
+			if (write_symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
+				write_symbol_in_symbol_data_buffer=0;
 			}
 			
 		}
