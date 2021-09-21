@@ -36,18 +36,22 @@
 // Intermediate Buffer
 uint8_t symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
 // Intermediate Buffer Write Index
-int write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+uint16_t write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 // Intermediate Buffer Read Index
-int read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+uint32_t read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+
+// Index in TX buffer of the previous symbol sent
+uint32_t previous_sent_symbol[XRAN_MAX_SECTOR_NR];
 
 // device context
 struct xran_device_ctx *p_xran_dev_ctx;
 
-void init_intermediate_buffer_indexes(){
+void init_buffer_indexes(){
 	
 	for(uint16_t cell_id=0; cell_id<XRAN_MAX_SECTOR_NR; cell_id++){
 		write_symbol_in_symbol_data_buffer[cell_id]=0;
 		read_symbol_in_symbol_data_buffer[cell_id]=0;
+		previous_sent_symbol[cell_id]=0;
 	}
 	
 }
@@ -63,7 +67,7 @@ int32_t get_current_tx_symbol_id(){
 	// the symbol index is reset every period (1 second=1000 ms=1000 sub-frames)
 	int32_t max_sym = XRAN_NUM_OF_SYMBOL_PER_SLOT*SLOTNUM_PER_SUBFRAME*1000;
 	
-	int32_t sym = ota_sym - off_sym;
+	int32_t sym = ota_sym - off_sym + 1;	// Added 1 since we do not know if ota_sym is the symbol currently send or the next one
 	
 	if(sym>=max_sym){
 		sym-=max_sym;
@@ -83,10 +87,10 @@ void send_intermediate_buffer_symbol(){
 	p_xran_dev_ctx = xran_dev_get_ctx();
 	
 	for(uint16_t cell_id=0; cell_id<XRAN_MAX_SECTOR_NR; cell_id++){
+		
+		int32_t sym = get_current_tx_symbol_id();
 	
-		if(write_symbol_in_symbol_data_buffer[cell_id]!=read_symbol_in_symbol_data_buffer[cell_id]){	// There are symbols to read
-			
-			int32_t sym = get_current_tx_symbol_id();
+		if(write_symbol_in_symbol_data_buffer[cell_id]!=read_symbol_in_symbol_data_buffer[cell_id] && sym!=previous_sent_symbol[cell_id]){	// There are symbols to read and the current TX symbol is not already used
 			
 			int32_t tti = sym / XRAN_NUM_OF_SYMBOL_PER_SLOT;
 			int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
@@ -99,12 +103,12 @@ void send_intermediate_buffer_symbol(){
 			
 			}
 			
+			read_symbol_in_symbol_data_buffer[cell_id]=read_symbol_in_symbol_data_buffer[cell_id]+1;
+			previous_sent_symbol[cell_id]=sym;
+			
 		}
 	
 	}
-	
-	// TODO:
-	// Sleep 1 symbol
 	
 	return;
 	
@@ -182,7 +186,7 @@ int main(int argc, char *argv[]){
                       (void *)xran_fh_srs_callback);
 	xranlib->Start();
 	
-	init_intermediate_buffer_indexes();
+	init_buffer_indexes();
 	
 }
 
