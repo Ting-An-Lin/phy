@@ -34,14 +34,23 @@
 #define SYMBOL_BUFFER_LEN 112 // =1 sub-frame
 
 // Intermediate Buffer
-uint8_t symbol_data_buffer[SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
+uint8_t symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
 // Intermediate Buffer Write Index
-int write_symbol_in_symbol_data_buffer=0;
+int write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 // Intermediate Buffer Read Index
-int read_symbol_in_symbol_data_buffer=0;
+int read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 
 // device context
 struct xran_device_ctx *p_xran_dev_ctx;
+
+void init_intermediate_buffer_indexes(){
+	
+	for(uint16_t cell_id=0; cell_id<XRAN_MAX_SECTOR_NR; cell_id++){
+		write_symbol_in_symbol_data_buffer[cell_id]=0;
+		read_symbol_in_symbol_data_buffer[cell_id]=0;
+	}
+	
+}
 
 int32_t get_current_tx_symbol_id(){
 	
@@ -73,17 +82,25 @@ void send_intermediate_buffer_symbol(){
 	// Retrieve the device context which contains information to access the buffer
 	p_xran_dev_ctx = xran_dev_get_ctx();
 	
-	if(write_symbol_in_symbol_data_buffer!=read_symbol_in_symbol_data_buffer){	// There are symbols to read
-		
-		int32_t sym = get_current_tx_symbol_id();
-		
-		int32_t tti = sym / XRAN_NUM_OF_SYMBOL_PER_SLOT;
-		int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
-		
-		// TODO:
-		// Build headers
-		// Write to buffer
-		
+	for(uint16_t cell_id=0; cell_id<XRAN_MAX_SECTOR_NR; cell_id++){
+	
+		if(write_symbol_in_symbol_data_buffer[cell_id]!=read_symbol_in_symbol_data_buffer[cell_id]){	// There are symbols to read
+			
+			int32_t sym = get_current_tx_symbol_id();
+			
+			int32_t tti = sym / XRAN_NUM_OF_SYMBOL_PER_SLOT;
+			int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
+			
+			for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
+			
+				// TODO:
+				// Build headers
+				// Write to buffer
+			
+			}
+			
+		}
+	
 	}
 	
 	// TODO:
@@ -135,7 +152,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 			
 			// Copy data to Intermediate Buffer
 			for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
-				symbol_data_buffer[write_symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
+				symbol_data_buffer[cell_id][ant_id][write_symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
 			}
 			
 			// Increment Intermediate Buffer Index
@@ -164,6 +181,9 @@ int main(int argc, char *argv[]){
                       (void *)xran_fh_rx_prach_callback, 
                       (void *)xran_fh_srs_callback);
 	xranlib->Start();
+	
+	init_intermediate_buffer_indexes();
+	
 }
 
 
