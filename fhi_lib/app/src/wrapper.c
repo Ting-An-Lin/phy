@@ -36,12 +36,12 @@
 // Intermediate Buffer
 uint8_t symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
 // Intermediate Buffer Write Index
-uint16_t write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+int write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 // Intermediate Buffer Read Index
-uint32_t read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+int read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 
 // Index in TX buffer of the previous symbol sent
-uint32_t previous_sent_symbol[XRAN_MAX_SECTOR_NR];
+int previous_sent_symbol[XRAN_MAX_SECTOR_NR];
 
 // device context
 struct xran_device_ctx *p_xran_dev_ctx;
@@ -97,6 +97,10 @@ void send_intermediate_buffer_symbol(){
 			
 			for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
 				
+				uint32_t nElementLenInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nElementLenInBytes;
+				uint32_t nNumberOfElements = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nNumberOfElements;
+				uint32_t nOffsetInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nOffsetInBytes;
+				uint32_t nIsPhyAddr = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nIsPhyAddr;
 				uint8_t *pData = p_xran_dev_ctx->sFrontHaulTxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[sym_idx%XRAN_NUM_OF_SYMBOL_PER_SLOT].pData;
 				void *pCtrl = p_xran_dev_ctx->sFrontHaulTxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[sym_idx%XRAN_NUM_OF_SYMBOL_PER_SLOT].pCtrl;
 				
@@ -106,15 +110,15 @@ void send_intermediate_buffer_symbol(){
 				
 				// Copy data from Intermediate Buffer
 				for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
-					pData[byte_index]=symbol_data_buffer[cell_id][ant_id][read_symbol_in_symbol_data_buffer][byte_index];
+					pData[byte_index]=symbol_data_buffer[cell_id][ant_id][read_symbol_in_symbol_data_buffer[cell_id]][byte_index];
 				}
 			
 			}
 			
 			// Increment Buffers Indexes
 			read_symbol_in_symbol_data_buffer[cell_id]=read_symbol_in_symbol_data_buffer[cell_id]+1;
-			if (read_symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
-				read_symbol_in_symbol_data_buffer=0;
+			if (read_symbol_in_symbol_data_buffer[cell_id]==SYMBOL_BUFFER_LEN){
+				read_symbol_in_symbol_data_buffer[cell_id]=0;
 			}
 			previous_sent_symbol[cell_id]=sym;
 			
@@ -168,13 +172,13 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 			
 			// Copy data to Intermediate Buffer
 			for (int byte_index=0; byte_index<SYMBOL_DATA_SIZE && byte_index<nElementLenInBytes; byte_index++){
-				symbol_data_buffer[cell_id][ant_id][write_symbol_in_symbol_data_buffer][byte_index]=pData[byte_index];
+				symbol_data_buffer[cell_id][ant_id][write_symbol_in_symbol_data_buffer[cell_id]][byte_index]=pData[byte_index];
 			}
 			
 			// Increment Intermediate Buffer Index
-			write_symbol_in_symbol_data_buffer=symbol_in_symbol_data_buffer+1;
-			if (write_symbol_in_symbol_data_buffer==SYMBOL_BUFFER_LEN){
-				write_symbol_in_symbol_data_buffer=0;
+			write_symbol_in_symbol_data_buffer[cell_id]=write_symbol_in_symbol_data_buffer[cell_id]+1;
+			if (write_symbol_in_symbol_data_buffer[cell_id]==SYMBOL_BUFFER_LEN){
+				write_symbol_in_symbol_data_buffer[cell_id]=0;
 			}
 			
 		}
