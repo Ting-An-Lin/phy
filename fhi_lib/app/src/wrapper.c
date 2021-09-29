@@ -65,7 +65,7 @@ int32_t get_current_tx_symbol_id(){
 	int32_t off_sym = p_xran_dev_ctx->sym_up;								// symbol offset of TX at DU with respect to OTA time
 	
 	// the symbol index is reset every period (1 second=1000 ms=1000 sub-frames)
-	int32_t max_sym = XRAN_NUM_OF_SYMBOL_PER_SLOT*SLOTNUM_PER_SUBFRAME*1000;
+	int32_t max_sym = XRAN_NUM_OF_SYMBOL_PER_SLOT*8/*SLOTNUM_PER_SUBFRAME*/*1000;
 	
 	int32_t sym = ota_sym - off_sym + 1;	// Added 1 since we do not know if ota_sym is the symbol currently send or the next one
 	
@@ -130,11 +130,11 @@ void send_intermediate_buffer_symbol(){
 	
 }
 
-void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
+void xran_fh_srs_callback(void *pCallbackTag, xran_status_t status){
     return;
 }
 
-void xran_fh_srs_callback(void *pCallbackTag, xran_status_t status){
+void xran_fh_rx_prach_callback(void *pCallbackTag, xran_status_t status){
     return;
 }
 
