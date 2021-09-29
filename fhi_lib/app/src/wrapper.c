@@ -46,6 +46,9 @@ int previous_sent_symbol[XRAN_MAX_SECTOR_NR];
 // device context
 struct xran_device_ctx *p_xran_dev_ctx;
 
+// while loop escape flag
+int escape_flag;
+
 void init_buffer_indexes(){
 	
 	for(uint16_t cell_id=0; cell_id<XRAN_MAX_SECTOR_NR; cell_id++){
@@ -203,6 +206,14 @@ int main(int argc, char *argv[]){
 	xranlib->Start();
 	
 	init_buffer_indexes();
+	
+	escape_flag=0;
+	
+	while(!escape_flag){
+		
+		send_intermediate_buffer_symbol();
+		
+	}
 	
 }
 
