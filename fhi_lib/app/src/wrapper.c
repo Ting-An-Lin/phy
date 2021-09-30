@@ -28,6 +28,9 @@
 #include "xran_lib_wrap.hpp"
 #include "common.hpp"
 
+#include <signal.h>
+#include <rte_pdump.h>
+
 // Number of bytes per symbol
 #define SYMBOL_DATA_SIZE 13168
 //Size in symbols of the intermediate buffer
@@ -48,6 +51,10 @@ struct xran_device_ctx *p_xran_dev_ctx;
 
 // while loop escape flag
 int escape_flag;
+
+void sigint_handler(int signum){
+	escape_flag=1;
+}
 
 void init_buffer_indexes(){
 	
@@ -209,11 +216,17 @@ int main(int argc, char *argv[]){
 	
 	escape_flag=0;
 	
+	signal(SIGINT,sigint_handler);
+	
+	rte_pdump_init();
+	
 	while(!escape_flag){
 		
 		send_intermediate_buffer_symbol();
 		
 	}
+	
+	rte_pdump_uninit();
 	
 }
 
