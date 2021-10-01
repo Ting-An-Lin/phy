@@ -218,15 +218,16 @@ int main(int argc, char *argv[]){
 	
 	signal(SIGINT,sigint_handler);
 	
-	rte_pdump_init();
+	printf("wrapper's initilization done.\n");
 	
 	while(!escape_flag){
 		
 		send_intermediate_buffer_symbol();
+		rte_pause();
 		
 	}
 	
-	rte_pdump_uninit();
+	printf("exiting wrapper.");
 	
 }
 
