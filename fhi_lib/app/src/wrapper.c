@@ -227,7 +227,9 @@ int main(int argc, char *argv[]){
 		
 	}
 	
-	printf("exiting wrapper.");
+	xranlib->Stop();
+
+	printf("\nexiting wrapper.\n");
 	
 }
 
