@@ -168,10 +168,10 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 	 */
 
 	// Loop over the antennas
-	for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
+	for(uint32_t symb_id = symbol; symb_id<symbol+7; symb_id++){
 		
 		// Loop over the symbols
-		for(uint32_t symb_id = symbol; symb_id<symbol+7; symb_id++){
+		for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
 			
 			uint32_t nElementLenInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nElementLenInBytes;
 			uint32_t nNumberOfElements = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nNumberOfElements;
@@ -185,13 +185,14 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 				symbol_data_buffer[cell_id][ant_id][write_symbol_in_symbol_data_buffer[cell_id]][byte_index]=pData[byte_index];
 			}
 			
-			// Increment Intermediate Buffer Index
-			write_symbol_in_symbol_data_buffer[cell_id]=write_symbol_in_symbol_data_buffer[cell_id]+1;
-			if (write_symbol_in_symbol_data_buffer[cell_id]==SYMBOL_BUFFER_LEN){
-				write_symbol_in_symbol_data_buffer[cell_id]=0;
-			}
-			
 		}
+		
+		// Increment Intermediate Buffer Index
+		write_symbol_in_symbol_data_buffer[cell_id]=write_symbol_in_symbol_data_buffer[cell_id]+1;
+		if (write_symbol_in_symbol_data_buffer[cell_id]==SYMBOL_BUFFER_LEN){
+			write_symbol_in_symbol_data_buffer[cell_id]=0;
+		}
+
 		
 	}
 	
@@ -210,13 +211,14 @@ int main(int argc, char *argv[]){
                       (void *)xran_fh_rx_callback, 
                       (void *)xran_fh_rx_prach_callback, 
                       (void *)xran_fh_srs_callback);
-	xranlib->Start();
 	
 	init_buffer_indexes();
 	
 	escape_flag=0;
 	
 	signal(SIGINT,sigint_handler);
+	
+	xranlib->Start();
 	
 	printf("wrapper's initilization done.\n");
 	
