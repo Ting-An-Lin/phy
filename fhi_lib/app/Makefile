@@ -23,7 +23,7 @@ MYCUSTOMSPACE1='------------------------------------------------------------'
 ##############################################################
 #  Tools configuration
 ##############################################################
-CC  := icpc
+CC  := icc
 CPP := icpc
 AS := as
 AR := ar
@@ -72,8 +72,9 @@ GTEST_HEADERS = $(GTEST_ROOT)/include/gtest/*.h \
 
 
 CC_SRC = $(SRC_DIR)/common.c \
-	$(SRC_DIR)/wrapper.c \
 	$(SRC_DIR)/config.c
+
+CPP_SRC = $(SRC_DIR)/wrapper.cpp 
 
 CC_FLAGS += -std=c++11 -Wall -Wno-deprecated-declarations  \
 	-fdata-sections \
