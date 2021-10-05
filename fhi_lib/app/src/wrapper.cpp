@@ -101,7 +101,9 @@ void send_intermediate_buffer_symbol(){
 		int32_t sym = get_current_tx_symbol_id();
 	
 		if(write_symbol_in_symbol_data_buffer[cell_id]!=read_symbol_in_symbol_data_buffer[cell_id] && sym!=previous_sent_symbol[cell_id]){	// There are symbols to read and the current TX symbol is not already used
-			
+			// printf to see if sending data to RU
+			printf("sending data to RU, symbol %d in intermediate buffer, cell %d\n",read_symbol_in_symbol_data_buffer[cell_id],cell_id);			
+
 			int32_t tti = sym / XRAN_NUM_OF_SYMBOL_PER_SLOT;
 			int32_t sym_idx = sym % XRAN_NUM_OF_SYMBOL_PER_SLOT;
 			
@@ -166,7 +168,9 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 	/* The slot and the cell id are fixed
 	 * We also know the start symbol and that we have to read half a slot
 	 */
-
+	
+	// printf to see if receiving data from RU
+	printf("receiving data from RU, symbol %d in intermediate buffer, cell %d\n",write_symbol_in_symbol_data_buffer[cell_id],cell_id);
 	// Loop over the antennas
 	for(uint32_t symb_id = symbol; symb_id<symbol+7; symb_id++){
 		
@@ -214,11 +218,11 @@ int main(int argc, char *argv[]){
 	
 	init_buffer_indexes();
 	
+	xranlib->Start();
+
 	escape_flag=0;
 	
 	signal(SIGINT,sigint_handler);
-	
-	xranlib->Start();
 	
 	printf("wrapper's initilization done.\n");
 	
@@ -234,7 +238,6 @@ int main(int argc, char *argv[]){
 	printf("\nexiting wrapper.\n");
 	
 }
-
 
 
 
