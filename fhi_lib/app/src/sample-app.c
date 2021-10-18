@@ -1658,6 +1658,7 @@ int main(int argc, char *argv[])
 
     sprintf(prefix_name, "wls_%d",startupConfiguration.instance_id);
     xranInit.filePrefix  = prefix_name;
+    printf("Sofia: file prefix %s\n",prefix_name);
 
     xranInit.totalBfWeights = startupConfiguration.totalBfWeights;
 

@@ -1,8 +1,8 @@
 {
     "GLOBAL": {
         "io_cfg": {
-            "dpdk_dev_up":          "",
-            "dpdk_dev_cp":          "",
+            "dpdk_dev_up":          "0000:b3:02.0",
+            "dpdk_dev_cp":          "0000:b3:02.1",
             "bbdev_mode":           "none",
             "system_core":          0,
             "core":                 5,
@@ -11,9 +11,9 @@
             "pkt_aux_core":         0,
             "dpdkBasebandFecMode":  0,
             "dpdkBasebandDevice":   "",
-            "mtu":                  9600,
-            "o_du_macaddr":         "00:11:22:33:44:66",
-            "o_ru_macaddr":         "00:11:22:33:44:55",
+            "mtu":                  1500,
+            "o_du_macaddr":         "00:11:22:33:44:55",
+            "o_ru_macaddr":         "64:9d:99:b1:95:ff",
             "cp_vlan_tag":          1,
             "up_vlan_tag":          2
             },
@@ -1000,7 +1000,7 @@
       "name": "xran_lib_api",
       "parameters": {
         "id": 0,
-        "dpdk_dev": [ "0000:d8:02.0", "0000:d8:02.1" ],
+        "dpdk_dev": [ "0000:b3:02.0", "0000:b3:02.1" ],
         "bbdev_dev": "none",
         "bbdev_mode": 0,
         "core": 5,
@@ -1013,9 +1013,9 @@
         "dpdkBasebandDevice": "none",
         "filePrefix": "wls",
         "xranCat": 0,
-        "mtu": 9600,
-        "p_o_du_addr": "00:11:22:33:44:66",
-        "p_o_ru_addr": "00:11:22:33:44:55",
+        "mtu": 1500,
+        "p_o_du_addr": "00:11:22:33:44:55",
+        "p_o_ru_addr": "64:9d:99:b1:95:ff",
         "Tadv_cp_dl": 0,
         "T2a_min_cp_dl": 0,
         "T2a_max_cp_dl": 0,
@@ -1035,8 +1035,8 @@
         "Ta4_max": 0,
         "enableCP": 1,
         "prachEnable": 1,
-        "cp_vlan_tag": 2,
-        "up_vlan_tag": 1,
+        "cp_vlan_tag": 1,
+        "up_vlan_tag": 2,
         "debugStop": 0,
         "debugStopCount": 0,
         "DynamicSectionEna": 0

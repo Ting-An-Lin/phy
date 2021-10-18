@@ -2993,6 +2993,7 @@ uint8_t  *xran_add_hdr_offset(uint8_t  *dst, int16_t compMethod)
           dst += sizeof (struct data_section_compression_hdr);
 
     dst = RTE_PTR_ALIGN_CEIL(dst, 64);
+    //printf("Sofia: dst[0] is %d\n",dst[0]);
 
     return dst;
 }

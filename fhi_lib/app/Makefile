@@ -23,7 +23,7 @@ MYCUSTOMSPACE1='------------------------------------------------------------'
 ##############################################################
 #  Tools configuration
 ##############################################################
-CC  := icc
+CC  := icpc
 CPP := icpc
 AS := as
 AR := ar
@@ -45,6 +45,7 @@ PROJECT_TYPE := elf
 PROJECT_DIR  := $(XRAN_DIR)/app
 BUILDDIR := ./build
 PROJECT_BINARY := $(BUILDDIR)/$(PROJECT_NAME)
+TEST_COMMON_DIR := $(XRAN_DIR)/test/common
 
 ifeq ($(RTE_SDK),)
     $(error "Please define RTE_SDK environment variable")
@@ -89,7 +90,7 @@ CPP_FLAGS := -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -D_GNU_SOURCE -D_REE
                 -no-prec-sqrt  -falign-functions=16 -fast-transcendentals \
         -Werror -Wno-unused-variable -std=c++11 -mcmodel=large
 
-INC +=  -I$(API_DIR) -I$(RTE_INC) -I/home/obi/odu-low/phy/fhi_lib/test/common -I$(XRAN_DIR)/lib/src 
+INC +=  -I$(API_DIR) -I$(RTE_INC) -I${TEST_COMMON_DIR} -I$(XRAN_DIR)/lib/src 
 DEF :=
 
 ifeq ($(MLOG),1)

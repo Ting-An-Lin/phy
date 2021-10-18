@@ -1,0 +1,295 @@
+
+ba@localhost:~/PISONS/phy/fhi_lib/app/build$ sudo LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./wrapper 
+[sudo] password for oba: 
+Sofia: m_xranInit.io_cfg.dpdk_dev[0] =0000:b3:02.0, m_xranInit.io_cfg.dpdk_dev[1]=0000:b3:02.1
+>>> Call SetUP() function
+O-DU MAC address: 00:11:22:33:44:55
+O-RU MAC address: 64:FFFFFF9D:FFFFFF99:FFFFFFB1:FFFFFF95:FFFFFFFF
+eAxCID - 12:8:4:0 (f000, 0f00, 00f0, 000f)
+Total BF Weights : 64
+ xran_init: MTU 1500
+total cores 32 c_mask 0xa7 core 5 [id] system_core 0 [id] pkt_proc_core 0x6 [mask] pkt_aux_core 0 [id] timing_core 7 [id]
+xran_ethdi_init_dpdk_io: Calling rte_eal_init:wls_0 -c 0xa7 -n2 --iova-mode=pa --socket-mem=8192 --socket-limit=8192 --proc-type=auto --file-prefix wls_0 -w 0000:00:00.0   
+EAL: Detected 32 lcore(s)
+EAL: Detected 1 NUMA nodes
+EAL: Auto-detected process type: PRIMARY
+EAL: Multi-process socket /var/run/dpdk/wls_0/mp_socket
+EAL: Selected IOVA mode 'PA'
+EAL: Probing VFIO support...
+EAL: VFIO support initialized
+EAL: PCI device 0000:b3:02.0 on NUMA socket 0
+EAL:   probe driver: 8086:154c net_i40e_vf
+EAL:   using IOMMU type 1 (Type 1)
+initializing port 0 for TX, drv=net_i40e_vf
+Port 0 MAC: 00 11 22 33 44 55
+Port 0: nb_rxd 4096 nb_txd 4096
+
+Checking link status portid [0]   ... done
+Port 0 Link Up - speed 25000 Mbps - full-duplex
+EAL: PCI device 0000:b3:02.1 on NUMA socket 0
+EAL:   probe driver: 8086:154c net_i40e_vf
+initializing port 1 for TX, drv=net_i40e_vf
+Port 1 MAC: 00 11 22 33 44 55
+Port 1: nb_rxd 4096 nb_txd 4096
+
+Checking link status portid [1]   ... done
+Port 1 Link Up - speed 25000 Mbps - full-duplex
+vf 0 local  SRC MAC: 00 11 22 33 44 55
+vf 0 remote DST MAC: 64 9d 99 b1 95 ff
+vf 1 local  SRC MAC: 00 11 22 33 44 55
+vf 1 remote DST MAC: 01 00 00 00 0a 00
+XRAN front haul xran_mm_init
+xran_sector_get_instances [0]: CC 0 handle 0x17e7d1c0
+Handle: 0x7f7ea48a0bd0 Instance: 0x17e7d1c0
+xran_sector_get_instances [0]: CC 1 handle 0x17e7d280
+Handle: 0x7f7ea48a0bd8 Instance: 0x17e7d280
+xran_sector_get_instances [0]: CC 2 handle 0x17e7d400
+Handle: 0x7f7ea48a0be0 Instance: 0x17e7d400
+xran_sector_get_instances [0]: CC 3 handle 0x17e7d4c0
+Handle: 0x7f7ea48a0be8 Instance: 0x17e7d4c0
+xran_sector_get_instances [0]: CC 4 handle 0x17e7d5c0
+Handle: 0x7f7ea48a0bf0 Instance: 0x17e7d5c0
+xran_sector_get_instances [0]: CC 5 handle 0x17eb3d00
+Handle: 0x7f7ea48a0bf8 Instance: 0x17eb3d00
+xran_sector_get_instances [0]: CC 6 handle 0x17eb3e00
+Handle: 0x7f7ea48a0c00 Instance: 0x17eb3e00
+xran_sector_get_instances [0]: CC 7 handle 0x17eb3ec0
+Handle: 0x7f7ea48a0c08 Instance: 0x17eb3ec0
+xran_sector_get_instances [0]: CC 8 handle 0x17eb3fc0
+Handle: 0x7f7ea48a0c10 Instance: 0x17eb3fc0
+xran_sector_get_instances [0]: CC 9 handle 0x17eb4080
+Handle: 0x7f7ea48a0c18 Instance: 0x17eb4080
+xran_sector_get_instances [0]: CC 10 handle 0x17eb4180
+Handle: 0x7f7ea48a0c20 Instance: 0x17eb4180
+xran_sector_get_instances [0]: CC 11 handle 0x17eb4240
+Handle: 0x7f7ea48a0c28 Instance: 0x17eb4240
+init_memory [0]: CC 0 handle 0x17e7d1c0
+init_memory [0]: CC 1 handle 0x17e7d280
+init_memory [0]: CC 2 handle 0x17e7d400
+init_memory [0]: CC 3 handle 0x17e7d4c0
+init_memory [0]: CC 4 handle 0x17e7d5c0
+init_memory [0]: CC 5 handle 0x17eb3d00
+init_memory [0]: CC 6 handle 0x17eb3e00
+init_memory [0]: CC 7 handle 0x17eb3ec0
+init_memory [0]: CC 8 handle 0x17eb3fc0
+init_memory [0]: CC 9 handle 0x17eb4080
+init_memory [0]: CC 10 handle 0x17eb4180
+init_memory [0]: CC 11 handle 0x17eb4240
+Sucess xran_mm_init
+ru_0_cc_0_idx_0: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 0] mb pool 0x2ea2f6700 
+ru_0_cc_0_idx_1: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 1] mb pool 0x2e6696d40 
+ru_0_cc_0_idx_2: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 2] mb pool 0x2e3cb4700 
+ru_0_cc_1_idx_0: [ handle 0x17e7d280 0 1 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 0] mb pool 0x2d69e83c0 
+ru_0_cc_1_idx_1: [ handle 0x17e7d280 0 1 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 1] mb pool 0x2d2d88a00 
+ru_0_cc_1_idx_2: [ handle 0x17e7d280 0 1 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 2] mb pool 0x2d03a63c0 
+ru_0_cc_2_idx_0: [ handle 0x17e7d400 0 2 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 0] mb pool 0x2c30da080 
+ru_0_cc_2_idx_1: [ handle 0x17e7d400 0 2 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 1] mb pool 0x2bf47a6c0 
+ru_0_cc_2_idx_2: [ handle 0x17e7d400 0 2 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 2] mb pool 0x2bca98080 
+ru_0_cc_3_idx_0: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 0] mb pool 0x2af7cbd40 
+ru_0_cc_3_idx_1: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 1] mb pool 0x2abb6c380 
+ru_0_cc_3_idx_2: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 2] mb pool 0x2a9189d40 
+ru_0_cc_4_idx_0: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 0] mb pool 0x29bebda00 
+ru_0_cc_4_idx_1: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 1] mb pool 0x29825e040 
+ru_0_cc_4_idx_2: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 2] mb pool 0x29587ba00 
+ru_0_cc_5_idx_0: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 0] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 0] mb pool 0x2885af6c0 
+ru_0_cc_5_idx_1: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 1] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 1] mb pool 0x28494fd00 
+ru_0_cc_5_idx_2: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 2] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 2] mb pool 0x281f6d6c0 
+ru_0_cc_0_idx_3: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 3] mb pool 0x274ca1380 
+ru_0_cc_0_idx_4: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 4] mb pool 0x2710419c0 
+ru_0_cc_0_idx_5: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 5] mb pool 0x26e65f380 
+ru_0_cc_1_idx_3: [ handle 0x17e7d280 0 1 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 3] mb pool 0x261393040 
+ru_0_cc_1_idx_4: [ handle 0x17e7d280 0 1 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 4] mb pool 0x25d733680 
+ru_0_cc_1_idx_5: [ handle 0x17e7d280 0 1 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 5] mb pool 0x25ad51040 
+ru_0_cc_2_idx_3: [ handle 0x17e7d400 0 2 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 3] mb pool 0x24da84d00 
+ru_0_cc_2_idx_4: [ handle 0x17e7d400 0 2 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 4] mb pool 0x249e25340 
+ru_0_cc_2_idx_5: [ handle 0x17e7d400 0 2 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 5] mb pool 0x247442d00 
+ru_0_cc_3_idx_3: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 3] mb pool 0x23a1769c0 
+ru_0_cc_3_idx_4: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 4] mb pool 0x236517000 
+ru_0_cc_3_idx_5: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 5] mb pool 0x233b349c0 
+ru_0_cc_4_idx_3: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 3] mb pool 0x226868680 
+ru_0_cc_4_idx_4: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 4] mb pool 0x222c08cc0 
+ru_0_cc_4_idx_5: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 5] mb pool 0x220226680 
+ru_0_cc_5_idx_3: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 3] nNumberOfBuffers 4480 nBufferSize 13168
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 3] mb pool 0x212f5a340 
+ru_0_cc_5_idx_4: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 4] nNumberOfBuffers 71680 nBufferSize 24
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 4] mb pool 0x20f2fa980 
+ru_0_cc_5_idx_5: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 5] nNumberOfBuffers 4480 nBufferSize 48416
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 5] mb pool 0x20c918340 
+ru_0_cc_0_idx_6: [ handle 0x17e7d1c0 0 0 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17e7d1c0 ru 0 cc_idx 0 ] [nPoolIndex 6] mb pool 0x1ff64c000 
+ru_0_cc_1_idx_6: [ handle 0x17e7d280 0 1 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17e7d280 ru 0 cc_idx 1 ] [nPoolIndex 6] mb pool 0x1fcf419c0 
+ru_0_cc_2_idx_6: [ handle 0x17e7d400 0 2 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17e7d400 ru 0 cc_idx 2 ] [nPoolIndex 6] mb pool 0x1fa837380 
+ru_0_cc_3_idx_6: [ handle 0x17e7d4c0 0 3 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17e7d4c0 ru 0 cc_idx 3 ] [nPoolIndex 6] mb pool 0x1f812cd40 
+ru_0_cc_4_idx_6: [ handle 0x17e7d5c0 0 4 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17e7d5c0 ru 0 cc_idx 4 ] [nPoolIndex 6] mb pool 0x1f5a22700 
+ru_0_cc_5_idx_6: [ handle 0x17eb3d00 0 5 ] [nPoolIndex 6] nNumberOfBuffers 4480 nBufferSize 8192
+CC:[ handle 0x17eb3d00 ru 0 cc_idx 5 ] [nPoolIndex 6] mb pool 0x1f33180c0 
+INIT DONE
+>>> Call SetUP() Done
+>>> Call fill_in_tx_buffer() function
+numCCPorts_ =6, num_eAxc_=8, MAX_ANT_CARRIER_SUPPORTED =192
+Loading file [0] /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_0.bin 
+Loading file /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_0.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 14784000]
+from addr (0x7f7e90188010) size (672000) bytes num (672000) 
+tx_play_buffer_size[0] = 672000, tx_play_buffer_position[0] = 0
+Loading file [1] /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_1.bin 
+Loading file /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_1.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 14784000]
+from addr (0x7f7e8b1e6010) size (672000) bytes num (672000) 
+tx_play_buffer_size[1] = 672000, tx_play_buffer_position[1] = 0
+Loading file [2] /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_2.bin 
+Loading file /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_2.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 14784000]
+from addr (0x7f7e8a3cc010) size (672000) bytes num (672000) 
+tx_play_buffer_size[2] = 672000, tx_play_buffer_position[2] = 0
+Loading file [3] /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_3.bin 
+Loading file /home/oba/PISONS/phy/fhi_lib/app/usecase/mu0_5mhz/ant_3.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 14784000]
+from addr (0x7f7e895b2010) size (672000) bytes num (672000) 
+tx_play_buffer_size[3] = 672000, tx_play_buffer_position[3] = 0
+CC 4 file not present in the folder
+tx_play_buffer_size[4] = 0, tx_play_buffer_position[4] = 0
+CC 5 file not present in the folder
+tx_play_buffer_size[5] = 0, tx_play_buffer_position[5] = 0
+CC 6 file not present in the folder
+tx_play_buffer_size[6] = 0, tx_play_buffer_position[6] = 0
+CC 7 file not present in the folder
+tx_play_buffer_size[7] = 0, tx_play_buffer_position[7] = 0
+CC 8 file not present in the folder
+tx_play_buffer_size[8] = 0, tx_play_buffer_position[8] = 0
+CC 9 file not present in the folder
+tx_play_buffer_size[9] = 0, tx_play_buffer_position[9] = 0
+CC 10 file not present in the folder
+tx_play_buffer_size[10] = 0, tx_play_buffer_position[10] = 0
+CC 11 file not present in the folder
+tx_play_buffer_size[11] = 0, tx_play_buffer_position[11] = 0
+CC 12 file not present in the folder
+tx_play_buffer_size[12] = 0, tx_play_buffer_position[12] = 0
+CC 13 file not present in the folder
+tx_play_buffer_size[13] = 0, tx_play_buffer_position[13] = 0
+CC 14 file not present in the folder
+tx_play_buffer_size[14] = 0, tx_play_buffer_position[14] = 0
+CC 15 file not present in the folder
+tx_play_buffer_size[15] = 0, tx_play_buffer_position[15] = 0
+CC 16 file not present in the folder
+tx_play_buffer_size[16] = 0, tx_play_buffer_position[16] = 0
+CC 17 file not present in the folder
+tx_play_buffer_size[17] = 0, tx_play_buffer_position[17] = 0
+CC 18 file not present in the folder
+tx_play_buffer_size[18] = 0, tx_play_buffer_position[18] = 0
+CC 19 file not present in the folder
+tx_play_buffer_size[19] = 0, tx_play_buffer_position[19] = 0
+CC 20 file not present in the folder
+tx_play_buffer_size[20] = 0, tx_play_buffer_position[20] = 0
+CC 21 file not present in the folder
+tx_play_buffer_size[21] = 0, tx_play_buffer_position[21] = 0
+CC 22 file not present in the folder
+tx_play_buffer_size[22] = 0, tx_play_buffer_position[22] = 0
+CC 23 file not present in the folder
+tx_play_buffer_size[23] = 0, tx_play_buffer_position[23] = 0
+CC 24 file not present in the folder
+tx_play_buffer_size[24] = 0, tx_play_buffer_position[24] = 0
+CC 25 file not present in the folder
+tx_play_buffer_size[25] = 0, tx_play_buffer_position[25] = 0
+CC 26 file not present in the folder
+tx_play_buffer_size[26] = 0, tx_play_buffer_position[26] = 0
+CC 27 file not present in the folder
+tx_play_buffer_size[27] = 0, tx_play_buffer_position[27] = 0
+CC 28 file not present in the folder
+tx_play_buffer_size[28] = 0, tx_play_buffer_position[28] = 0
+CC 29 file not present in the folder
+tx_play_buffer_size[29] = 0, tx_play_buffer_position[29] = 0
+CC 30 file not present in the folder
+tx_play_buffer_size[30] = 0, tx_play_buffer_position[30] = 0
+CC 31 file not present in the folder
+tx_play_buffer_size[31] = 0, tx_play_buffer_position[31] = 0
+CC 32 file not present in the folder
+tx_play_buffer_size[32] = 0, tx_play_buffer_position[32] = 0
+CC 33 file not present in the folder
+tx_play_buffer_size[33] = 0, tx_play_buffer_position[33] = 0
+CC 34 file not present in the folder
+tx_play_buffer_size[34] = 0, tx_play_buffer_position[34] = 0
+CC 35 file not present in the folder
+tx_play_buffer_size[35] = 0, tx_play_buffer_position[35] = 0
+CC 36 file not present in the folder
+tx_play_buffer_size[36] = 0, tx_play_buffer_position[36] = 0
+CC 37 file not present in the folder
+tx_play_buffer_size[37] = 0, tx_play_buffer_position[37] = 0
+CC 38 file not present in the folder
+tx_play_buffer_size[38] = 0, tx_play_buffer_position[38] = 0
+CC 39 file not present in the folder
+tx_play_buffer_size[39] = 0, tx_play_buffer_position[39] = 0
+CC 40 file not present in the folder
+tx_play_buffer_size[40] = 0, tx_play_buffer_position[40] = 0
+CC 41 file not present in the folder
+tx_play_buffer_size[41] = 0, tx_play_buffer_position[41] = 0
+CC 42 file not present in the folder
+tx_play_buffer_size[42] = 0, tx_play_buffer_position[42] = 0
+CC 43 file not present in the folder
+tx_play_buffer_size[43] = 0, tx_play_buffer_position[43] = 0
+CC 44 file not present in the folder
+tx_play_buffer_size[44] = 0, tx_play_buffer_position[44] = 0
+CC 45 file not present in the folder
+tx_play_buffer_size[45] = 0, tx_play_buffer_position[45] = 0
+CC 46 file not present in the folder
+tx_play_buffer_size[46] = 0, tx_play_buffer_position[46] = 0
+CC 47 file not present in the folder
+tx_play_buffer_size[47] = 0, tx_play_buffer_position[47] = 0
+>>> fill_in_tx_buffer() Done
+>>> Call Open() function
+>>> Open() function Done
+>>> Call Init() function
+>>> Init() function Done
+p_xran_dev_ctx_2=-603318496
+the maximum flowID will be=47
+
+XRAN_UP_VF: 0x0000
+XRAN_CP_VF: 0x0001
+xran_timing_source_thread [CPU  7] [PID:  49394]
+ring_processing_thread [CPU  1] [PID:  49394]
+ring_processing_thread [CPU  2] [PID:  49394]
+>>> Call Sart() function
+>>> Start() function Done
+wrapper's initilization done.
+XRAN IS running
+CP IS enabled
+PRACH IS enabled
+Dynamic Section NOT enabled
+
+exiting wrapper.
+Pkt processing thread finished.
+Pkt processing thread finished.
+

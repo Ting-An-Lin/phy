@@ -210,7 +210,7 @@ private:
         /* initialize maximum instances to have flexibility for the tests */
         int nInstanceNum = XRAN_MAX_SECTOR_NR;
         /* initialize maximum supported CC to have flexibility on the test */
-        int32_t nSectorNum = 6;//XRAN_MAX_SECTOR_NR;
+        int32_t nSectorNum = 6; //XRAN_MAX_SECTOR_NR;
 
         for(k = 0; k < XRAN_PORTS_NUM; k++) {
             status = xran_sector_get_instances(m_xranhandle, nInstanceNum, &m_nInstanceHandle[k][0]);
@@ -476,8 +476,10 @@ public:
         m_dpdk_dev_up = get_globalcfg<std::string>(XRAN_UT_KEY_GLOBALCFG_IO, "dpdk_dev_up");
         m_dpdk_dev_cp = get_globalcfg<std::string>(XRAN_UT_KEY_GLOBALCFG_IO, "dpdk_dev_cp");
         m_xranInit.io_cfg.num_vfs = 2;
-        m_xranInit.io_cfg.dpdk_dev[XRAN_UP_VF]  = "0000:65:02.0";
-        m_xranInit.io_cfg.dpdk_dev[XRAN_CP_VF]  = "0000:65:02.1";
+        m_xranInit.io_cfg.dpdk_dev[XRAN_UP_VF]  = "0000:b3:02.0";
+        m_xranInit.io_cfg.dpdk_dev[XRAN_CP_VF]  = "0000:b3:02.1";
+ 
+        printf("Sofia: m_xranInit.io_cfg.dpdk_dev[%d] =%s, m_xranInit.io_cfg.dpdk_dev[%d]=%s\n",XRAN_UP_VF,m_xranInit.io_cfg.dpdk_dev[XRAN_UP_VF],XRAN_CP_VF,m_xranInit.io_cfg.dpdk_dev[XRAN_CP_VF]);
 
         m_xranInit.io_cfg.core              = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_IO, "core");
         m_xranInit.io_cfg.system_core       = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_IO, "system_core");
@@ -513,7 +515,7 @@ public:
                                            &tmp_mac[3], &tmp_mac[4], &tmp_mac[5]);
         for(i=0; i<6; i++)
             m_du_mac[i] = (uint8_t)tmp_mac[i];
-        std::sscanf(du_mac_str.c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
+        std::sscanf(ru_mac_str.c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
                                            &tmp_mac[0], &tmp_mac[1], &tmp_mac[2],
                                            &tmp_mac[3], &tmp_mac[4], &tmp_mac[5]);
         for(i=0; i<6; i++)
@@ -558,13 +560,17 @@ public:
         m_xranInit.Ta4_min          = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_RU, "Ta4_min");
         m_xranInit.Ta4_max          = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_RU, "Ta4_max");
 
-        m_xranInit.enableCP         = 1;
-        m_xranInit.prachEnable      = 1;
-        m_xranInit.debugStop        = 0;
+        //m_xranInit.enableCP         = 1;
+        m_xranInit.enableCP         = 0;    // Sofia try to modify 
+        //m_xranInit.prachEnable      = 1;
+        m_xranInit.prachEnable      = 0;   // Sofia modify according to sample app log 
+        //m_xranInit.debugStop        = 0; // Sofia Modify according to sample app log
+        m_xranInit.debugStop        = 1;   // Sofia Modify according to sample app log
         m_xranInit.debugStopCount   = 0;
         m_xranInit.DynamicSectionEna= 0;
 
-        m_xranInit.filePrefix   = "wls";
+        //m_xranInit.filePrefix   = "wls"; //Sofia modifies
+        m_xranInit.filePrefix   = "wls_0"; // Sofia Modifies
 
         m_bSub6     = get_globalcfg<bool>(XRAN_UT_KEY_GLOBALCFG_RU, "sub6");
 
@@ -659,7 +665,9 @@ public:
         m_xranConf.ru_conf.byteOrder    =  XRAN_NE_BE_BYTE_ORDER;
         m_xranConf.ru_conf.iqOrder      =  XRAN_I_Q_ORDER;
 
-        m_xranConf.log_level    = 0;
+        //m_xranConf.log_level    = 0; // Sofia modif
+        m_xranConf.log_level    = 1; //Sofia modif
+
 /*
         m_xranConf.bbdev_enc = nullptr;
         m_xranConf.bbdev_dec = nullptr;
@@ -1013,7 +1021,7 @@ public:
 
         xran_register_cb_mbuf2ring(send_cp, send_up);
 
-        xran_open(m_xranhandle, &m_xranConf);
+        //xran_open(m_xranhandle, &m_xranConf); // Sofia comment
     }
 
     void Close()

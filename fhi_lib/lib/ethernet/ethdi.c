@@ -86,6 +86,8 @@ int32_t xran_ethdi_mbuf_send(struct rte_mbuf *mb, uint16_t ethertype, uint16_t v
 
     mb->port = ctx->io_cfg.port[vf_id];
     xran_add_eth_hdr_vlan(&ctx->entities[vf_id][ID_O_RU], ethertype, mb);
+    
+    printf("Sofia check pass xran_ethdi_mbuf_send to DPDK User Plane \n");    
 
     res = xran_enqueue_mbuf(mb, ctx->tx_ring[vf_id]);
     return res;
@@ -98,6 +100,8 @@ int32_t xran_ethdi_mbuf_send_cp(struct rte_mbuf *mb, uint16_t ethertype, uint16_
 
     mb->port = ctx->io_cfg.port[vf_id];
     xran_add_eth_hdr_vlan(&ctx->entities[vf_id][ID_O_RU], ethertype, mb);
+
+    printf("Sofia check pass xran_ethdi_mbuf_send to DPDK Control Plane \n");
 
     res = xran_enqueue_mbuf(mb, ctx->tx_ring[vf_id]);
     return res;
@@ -400,14 +404,17 @@ xran_ethdi_init_dpdk_io(char *name, const struct xran_io_cfg *io_cfg,
                    p_addr->addr_bytes[0], p_addr->addr_bytes[1], p_addr->addr_bytes[2],
                    p_addr->addr_bytes[3], p_addr->addr_bytes[4], p_addr->addr_bytes[5]);
 
-            p_addr = &p_ru_addr[i];
+           // p_addr = &p_ru_addr[i]; // original
+            p_addr = &p_ru_addr[0];   // Sofia correction for wrapper
+           // p_addr = &p_o_du_addr[i]; // just to try what there is inside du
             printf("vf %u remote DST MAC: %02"PRIx8" %02"PRIx8" %02"PRIx8
                    " %02"PRIx8" %02"PRIx8" %02"PRIx8"\n",
                    (unsigned)i,
                    p_addr->addr_bytes[0], p_addr->addr_bytes[1], p_addr->addr_bytes[2],
                    p_addr->addr_bytes[3], p_addr->addr_bytes[4], p_addr->addr_bytes[5]);
 
-            rte_ether_addr_copy(&p_ru_addr[i],  &ctx->entities[i][ID_O_RU]);
+           //rte_ether_addr_copy(&p_ru_addr[i],  &ctx->entities[i][ID_O_RU]); // Original
+           rte_ether_addr_copy(&p_ru_addr[0],  &ctx->entities[i][ID_O_RU]);    // Sofia Correction Wrapper
         }
     }
 

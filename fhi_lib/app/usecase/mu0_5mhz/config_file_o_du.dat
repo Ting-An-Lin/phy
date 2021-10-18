@@ -44,10 +44,10 @@ Gps_Beta=0
 
 ioCore=5
 # Eth 0
-duMac0=00:11:22:33:44:66 # asigned MAC of O-DU VF
-ruMac0=00:11:22:33:44:55 # O-RU VF for O-RU app
-duMac1=00:11:22:33:44:66 # asigned MAC of O-DU VF
-ruMac1=00:11:22:33:44:55 # O-RU VF for O-RU app
+duMac0=00:11:22:33:44:55 # asigned MAC of O-DU VF
+ruMac0=00:11:22:33:44:66 # O-RU VF for O-RU app
+duMac1=00:11:22:33:44:55 # asigned MAC of O-DU VF
+ruMac1=00:11:22:33:44:66 # O-RU VF for O-RU app
 
 #Eth 1
 duMac2=00:11:22:33:44:77 # asigned MAC of O-DU VF

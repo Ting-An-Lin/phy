@@ -19,6 +19,10 @@
 #ifndef _XRAN_APP_COMMON_H_
 #define _XRAN_APP_COMMON_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 
@@ -141,6 +145,8 @@ int32_t app_xran_set_slot_type(uint32_t nPhyInstanceId, uint32_t nFrameDuplexTyp
                 uint32_t nTddPeriod, struct xran_slot_config *psSlotConfig);
 uint32_t app_xran_get_tti_interval(uint8_t nMu);
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*_XRAN_APP_COMMON_H_*/

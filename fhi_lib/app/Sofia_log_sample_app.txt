@@ -1,0 +1,213 @@
+
+ba@localhost:~/PISONS/phy/fhi_lib/app$ sudo LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./run_o_du.sh
+
+
+===========================================================================================================
+SAMPLE-APP VERSION
+===========================================================================================================
+Version: oran_bronze_release_v1.1
+build-date: Oct 15 2021
+build-time: 17:17:51
+arg_params.cfg_file (./usecase/mu0_5mhz/config_file_o_du.dat)
+pmc[1464650.057]: uds: sendto failed: No such file or directory
+Machine is not synchronized using PTP!
+instance_id 0
+mu_number: 0
+nDLAbsFrePointA: 2645460
+nULAbsFrePointA: 2525460
+nDLBandwidth: 5
+nULBandwidth: 5
+nDLFftSize: 512
+nULFftSize: 512
+nFrameDuplexType: 0
+nTddPeriod: 0
+mtu 9600
+GPS_Alpha: 0
+GPS_Beta: 0
+io_core 5 [core id]
+duMac0: 00:11:22:33:44:55
+[vf 0]O-DU MAC address: 00:11:22:33:44:55
+ruMac0: 00:11:22:33:44:66
+[vf 0]RU MAC address: 00:11:22:33:44:66
+duMac1: 00:11:22:33:44:55
+[vf 1]O-DU MAC address: 00:11:22:33:44:55
+ruMac1: 00:11:22:33:44:66
+[vf 1]RU MAC address: 00:11:22:33:44:66
+duMac2: 00:11:22:33:44:77
+[vf 2]O-DU MAC address: 00:11:22:33:44:77
+ruMac2: 00:11:22:33:44:44
+[vf 2]RU MAC address: 00:11:22:33:44:44
+duMac3: 00:11:22:33:44:77
+[vf 3]O-DU MAC address: 00:11:22:33:44:77
+ruMac3: 00:11:22:33:44:44
+[vf 3]RU MAC address: 00:11:22:33:44:44
+numSlots: 40
+antC0: ./usecase/mu0_5mhz/ant_0.bin
+antC1: ./usecase/mu0_5mhz/ant_1.bin
+antC2: ./usecase/mu0_5mhz/ant_2.bin
+antC3: ./usecase/mu0_5mhz/ant_3.bin
+antC4: ./usecase/mu0_5mhz/ant_4.bin
+antC5: ./usecase/mu0_5mhz/ant_5.bin
+antC6: ./usecase/mu0_5mhz/ant_6.bin
+antC7: ./usecase/mu0_5mhz/ant_7.bin
+antC8: ./usecase/mu0_5mhz/ant_8.bin
+antC9: ./usecase/mu0_5mhz/ant_9.bin
+antC10: ./usecase/mu0_5mhz/ant_10.bin
+antC11: ./usecase/mu0_5mhz/ant_11.bin
+antC12: ./usecase/mu0_5mhz/ant_12.bin
+antC13: ./usecase/mu0_5mhz/ant_13.bin
+antC14: ./usecase/mu0_5mhz/ant_14.bin
+antC15: ./usecase/mu0_5mhz/ant_15.bin
+Prach enable: 0
+debugStop: 1
+debugStopCount: 0
+bbdevMode: 0
+CPenable: 1
+cp_vlan_tag: 1
+up_vlan_tag: 2
+totalBFWeights : 32
+Tadv_cp_dl: 25
+T2a_min_cp_dl: 400
+T2a_max_cp_dl: 1120
+T2a_min_cp_ul: 400
+T2a_max_cp_ul: 1120
+T2a_min_up: 200
+T2a_max_up: 1120
+Ta3_min: 160
+Ta3_max: 256
+T1a_min_cp_dl: 560
+T1a_max_cp_dl: 800
+T1a_min_cp_ul: 480
+T1a_max_cp_ul: 560
+T1a_min_up: 280
+T1a_max_up: 400
+Ta4_min: 0
+Ta4_max: 360
+137 lines of config file has been read.
+numCCPorts 1 num_eAxc4
+nSW_ToFpga_FTH_TxBufferLen 15696
+set O-DU
+bit_cuPortId     12 mask 0xf000
+bit_bandSectorId  8 mask 0x0f00
+bit_ccId          4 mask 0x00f0
+ruPortId          0 mask 0x000f
+arg_params.num_vfs 2
+VF[0] 0000:b3:02.0
+VF[1] 0000:b3:02.1
+Sofia: file prefix wls_0
+IQ files size is 40 slots
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2645460] numRBs[25]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2525460] numRBs[25]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2645460] numRBs[25]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2525460] numRBs[25]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2525460] numRBs[25]
+Loading file ./usecase/mu0_5mhz/ant_0.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 672000]
+from addr (0x7f63bbd30010) size (672000) bytes num (672000) 
+Loading file ./usecase/mu0_5mhz/ant_1.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 672000]
+from addr (0x7f63bbc8b010) size (672000) bytes num (672000) 
+Loading file ./usecase/mu0_5mhz/ant_2.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 672000]
+from addr (0x7f6369c4f010) size (672000) bytes num (672000) 
+Loading file ./usecase/mu0_5mhz/ant_3.bin to  DL IFFT IN IQ Samples in binary format: Reading IQ samples from file: File Size: 672000 [Buffer Size: 672000]
+from addr (0x7f6369baa010) size (672000) bytes num (672000) 
+Storing DL IFFT IN IQ Samples in human readable format to file ./logs/o-du-play_ant0.txt: from addr (0x7f63bbd30010) size (672000) IQ num (168000) 
+Storing DL IFFT IN IQ Samples in binary format to file ./logs/o-du-play_ant0.bin: from addr (0x7f63bbd30010) size (336000) bytes num (336000) 
+Storing DL IFFT IN IQ Samples in human readable format to file ./logs/o-du-play_ant1.txt: from addr (0x7f63bbc8b010) size (672000) IQ num (168000) 
+Storing DL IFFT IN IQ Samples in binary format to file ./logs/o-du-play_ant1.bin: from addr (0x7f63bbc8b010) size (336000) bytes num (336000) 
+Storing DL IFFT IN IQ Samples in human readable format to file ./logs/o-du-play_ant2.txt: from addr (0x7f6369c4f010) size (672000) IQ num (168000) 
+Storing DL IFFT IN IQ Samples in binary format to file ./logs/o-du-play_ant2.bin: from addr (0x7f6369c4f010) size (336000) bytes num (336000) 
+Storing DL IFFT IN IQ Samples in human readable format to file ./logs/o-du-play_ant3.txt: from addr (0x7f6369baa010) size (672000) IQ num (168000) 
+Storing DL IFFT IN IQ Samples in binary format to file ./logs/o-du-play_ant3.bin: from addr (0x7f6369baa010) size (336000) bytes num (336000) 
+TX: Convert S16 I and S16 Q to network byte order for XRAN Ant: [0]
+TX: Convert S16 I and S16 Q to network byte order for XRAN Ant: [1]
+TX: Convert S16 I and S16 Q to network byte order for XRAN Ant: [2]
+TX: Convert S16 I and S16 Q to network byte order for XRAN Ant: [3]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2645460] numRBs[25]
+app_xran_get_num_rbs: RAN [5G NR] nNumerology[0] nBandwidth[5] nAbsFrePointA[2525460] numRBs[25]
+System clock (rdtsc) resolution 1900001015 [Hz]
+Ticks per us 1900
+ xran_init: MTU 9600
+total cores 32 c_mask 0x21 core 5 [id] system_core 0 [id] pkt_proc_core 0x0 [mask] pkt_aux_core 0 [id] timing_core 5 [id]
+xran_ethdi_init_dpdk_io: Calling rte_eal_init:wls_0 -c 0x21 -n2 --iova-mode=pa --socket-mem=8192 --socket-limit=8192 --proc-type=auto --file-prefix wls_0 -w 0000:00:00.0   
+EAL: Detected 32 lcore(s)
+EAL: Detected 1 NUMA nodes
+EAL: Auto-detected process type: PRIMARY
+EAL: Multi-process socket /var/run/dpdk/wls_0/mp_socket
+EAL: Selected IOVA mode 'PA'
+EAL: Probing VFIO support...
+EAL: VFIO support initialized
+EAL: PCI device 0000:b3:02.0 on NUMA socket 0
+EAL:   probe driver: 8086:154c net_i40e_vf
+EAL:   using IOMMU type 1 (Type 1)
+initializing port 0 for TX, drv=net_i40e_vf
+Port 0 MAC: 00 11 22 33 44 55
+Port 0: nb_rxd 4096 nb_txd 4096
+
+Checking link status portid [0]   ... done
+Port 0 Link Up - speed 25000 Mbps - full-duplex
+EAL: PCI device 0000:b3:02.1 on NUMA socket 0
+EAL:   probe driver: 8086:154c net_i40e_vf
+initializing port 1 for TX, drv=net_i40e_vf
+Port 1 MAC: 00 11 22 33 44 55
+Port 1: nb_rxd 4096 nb_txd 4096
+
+Checking link status portid [1]   ... done
+Port 1 Link Up - speed 25000 Mbps - full-duplex
+vf 0 local  SRC MAC: 00 11 22 33 44 55
+vf 0 remote DST MAC: 00 11 22 33 44 66
+vf 1 local  SRC MAC: 00 11 22 33 44 55
+vf 1 remote DST MAC: 00 11 22 33 44 66
+FFT Order 9
+app_xran_cal_nrarfcn: nCenterFreq[2647710] nDeltaFglobal[5] nFoffs[0] nNoffs[0] nNRARFCN[529542]
+DL center freq 2647710 DL NR-ARFCN  529542
+app_xran_cal_nrarfcn: nCenterFreq[2527710] nDeltaFglobal[5] nFoffs[0] nNoffs[0] nNRARFCN[505542]
+UL center freq 2527710 UL NR-ARFCN  505542
+XRAN front haul xran_mm_init 
+xran_sector_get_instances [0]: CC 0 handle 0x1329a3c0
+Handle: 0x11916f58 Instance: 0x1329a3c0
+init_xran [0]: CC 0 handle 0x1329a3c0
+Sucess xran_mm_init 
+nSectorNum 1
+nSectorIndex[0] = 0
+ru_0_cc_0_idx_0: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 0] nNumberOfBuffers 2240 nBufferSize 15696
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 0] mb pool 0x2ea2f6700 
+ru_0_cc_0_idx_1: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 1] nNumberOfBuffers 35840 nBufferSize 24
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 1] mb pool 0x2e7ed13c0 
+ru_0_cc_0_idx_2: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 2] nNumberOfBuffers 2240 nBufferSize 48416
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 2] mb pool 0x2e691ed80 
+ru_0_cc_0_idx_3: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 3] nNumberOfBuffers 2240 nBufferSize 15696
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 3] mb pool 0x2dfef1a40 
+ru_0_cc_0_idx_4: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 4] nNumberOfBuffers 35840 nBufferSize 24
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 4] mb pool 0x2ddacc700 
+ru_0_cc_0_idx_5: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 5] nNumberOfBuffers 2240 nBufferSize 48416
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 5] mb pool 0x2dc51a0c0 
+ru_0_cc_0_idx_6: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 6] nNumberOfBuffers 2240 nBufferSize 8192
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 6] mb pool 0x2d5aecd80 
+ru_0_cc_0_idx_7: [ handle 0x1329a3c0 0 0 ] [nPoolIndex 7] nNumberOfBuffers 2240 nBufferSize 15696
+CC:[ handle 0x1329a3c0 ru 0 cc_idx 0 ] [nPoolIndex 7] mb pool 0x2d46a5740 
+init_xran_iq_content
+ xran_open: 5G NR Category A
+xRAN open PRACH config: Numerology 0 ConfIdx 0, preambleFmrt 0 startsymb 0, numSymbol 0, occassionsInPrachSlot 0
+PRACH: x 16 y[0] 1, y[1] 0 prach slot: 1 ..
+PRACH start symbol 0 lastsymbol 0
+xran_open: interval_us=1000
+XRAN_UP_VF: 0x0000
+XRAN_CP_VF: 0x0001
+----------------------------------------
+MLog Info: virt=0x0000000000000000 size=0
+----------------------------------------
+xran_timing_source_thread [CPU  5] [PID:  49236]
+Start XRAN traffic
+Set debug stop 1, debug stop count 0
+O-DU: thread_run start time: 10/18/21 08:28:10.000000014 UTC [1000]
+Start C-plane DL 200 us after TTI  [trigger on sym 3]
+Start C-plane UL 440 us after TTI  [trigger on sym 7]
+Start U-plane DL 400 us before OTA [offset  in sym -5]
+Start U-plane UL 360 us OTA        [offset  in sym 6]
+C-plane to U-plane delay 200 us after TTI
+Start Sym timer 71428 ns
+interval_us 1000
++---------------------------------------+
+| Press 1 to start 5G NR XRAN traffic   |
+| Press 2 reserved for future use       |
+| Press 3 to quit                       |
+

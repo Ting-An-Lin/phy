@@ -109,7 +109,7 @@ CPP_FLAGS := -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -D_GNU_SOURCE -D_REE
                 -no-prec-sqrt  -falign-functions=16 -fast-transcendentals \
         -Werror -Wno-unused-variable -std=c++11 -mcmodel=large
 
-INC +=  -I$(API_DIR) -I$(ETH_DIR) -I$(SRC_DIR) -I$(RTE_INC)
+INC +=  -I$(API_DIR) -I$(ETH_DIR) -I$(SRC_DIR) -I$(RTE_INC) -I$(COMMON_TEST_DIR)
 DEF :=
 ifeq ($(MLOG),1)
 	INC  += -I$(MLOG_DIR)/source
