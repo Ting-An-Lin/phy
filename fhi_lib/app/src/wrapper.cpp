@@ -31,12 +31,21 @@
 #include <signal.h>
 #include <rte_pdump.h>
 
+// Callback Tags buffer size
+#define CALLBACK_TAGS_BUFFER_LEN (1000)
 // Number of bytes per symbol
 #define SYMBOL_DATA_SIZE (13168)
 //Size in slots of the intermediate buffer
 #define SLOT_BUFFER_LEN (10) // =1 sub-frame
 //Size in slot of the intermediate buffer
 #define SYMBOL_BUFFER_LEN (SLOT_BUFFER_LEN*XRAN_NUM_OF_SYMBOL_PER_SLOT)
+
+// Calback Tags buffer
+xran_cb_tag callback_tags_buffer[CALLBACK_TAGS_BUFFER_LEN];
+// index of tags to read
+int  callback_tags_to_read_index=-1;
+// index of read tags
+int callback_tags_already_read_index=-1;
 
 // Intermediate Buffer
 uint8_t symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
@@ -420,20 +429,31 @@ void xran_fh_rx_prach_callback(void *pCallbackTag, xran_status_t status){
 
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 	
+	if(status!=XRAN_STATUS_SUCCESS){
+		return;
+	}
+
+	callback_tags_to_read_index=(callback_tags_to_read_index+1)%CALLBACK_TAGS_BUFFER_LEN;
+	callback_tags_buffer[callback_tags_to_read_index]=*((xran_cb_tag *)pCallbackTag);
         rte_pause();
-        return; 
+        return;
+}
+
+void xran_fh_rx_read_shared_buffer(){ 
 
 // Do it after in another separate function
 	int num_eaxc = xranlib->get_num_eaxc();
 	int num_eaxc_ul = xranlib->get_num_eaxc_ul();
 	uint32_t xran_max_antenna_nr = RTE_MAX(num_eaxc, num_eaxc_ul);
 
-	if(status!=XRAN_STATUS_SUCCESS){
+	if(callback_tags_to_read_index==callback_tags_already_read_index){
 		return;
 	}
-	
+
 	// pCallbackTag is a structure which contains the timing and the cell id
-	struct xran_cb_tag *pTag = (xran_cb_tag *)pCallbackTag;
+	callback_tags_already_read_index=(callback_tags_already_read_index+1)%CALLBACK_TAGS_BUFFER_LEN;
+	struct xran_cb_tag *pTag = &callback_tags_buffer[callback_tags_already_read_index];
+
 	uint16_t cell_id = pTag->cellId;
 	uint32_t tti = pTag->slotiId;
 	uint32_t symbol = pTag->symbol;
@@ -486,7 +506,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
                                 printf("start_sym_id=%d\n",prb_map_buffer.start_sym_id);
                                 printf("nPrbElm=%d\n",prb_map_buffer.nPrbElm);
 */
-                                //printf("Rx callback symbol_id %d, antenna_id %d \n\n",symb_id,ant_id);
+                                printf("Rx callback symbol_id %d, antenna_id %d \n\n",symb_id,ant_id);
                         }
 			
 		}
@@ -707,6 +727,7 @@ int main(int argc, char *argv[]){
 
 	while(!escape_flag){
 		//send_intermediate_buffer_symbol();
+		xran_fh_rx_read_shared_buffer();
 		rte_pause();		
 	}
 
