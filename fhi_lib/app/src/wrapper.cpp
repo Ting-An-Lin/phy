@@ -55,6 +55,8 @@ struct xran_device_ctx *p_xran_dev_ctx_2;
 // while loop escape flag
 int escape_flag;
 
+xranLibWraper *xranlib;
+
 void sigint_handler(int signum){
 	escape_flag=1;
 	printf("Received SIGINT, Exiting.\n");
@@ -95,7 +97,7 @@ int32_t get_current_tx_symbol_id(){
 	
 }
 
-void send_intermediate_buffer_symbol_test(xranLibWraper *xranlib){
+void send_intermediate_buffer_symbol_test(){
 
        int32_t flowId;
        void *ptr = NULL;
@@ -146,7 +148,8 @@ void send_intermediate_buffer_symbol_test(xranLibWraper *xranlib){
 				// Prb Map Data	
 		//		uint32_t nPrbMapElementLenInBytes = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->nElementLenInBytes;
                 //               	uint32_t nPrbMapNumberOfElements = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->nNumberOfElements;
-                //                uint32_t nPrbMapOffsetInBytes = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->nOffsetInBytes;
+               
+    rte_pause(); //                uint32_t nPrbMapOffsetInBytes = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->nOffsetInBytes;
                 //                uint32_t nPrbMapIsPhyAddr = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->nIsPhyAddr;
                                 uint8_t *pPrbMapData = p_xran_dev_ctx_2->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->pData;
                 //                void *pPrbMapCtrl = p_xran_dev_ctx->sFrontHaulTxPrbMapBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cc_id][ant_id].sBufferList.pBuffers->pCtrl;
@@ -406,15 +409,25 @@ void send_intermediate_buffer_symbol(){
 }
 
 void xran_fh_srs_callback(void *pCallbackTag, xran_status_t status){
+    rte_pause();
     return;
 }
 
 void xran_fh_rx_prach_callback(void *pCallbackTag, xran_status_t status){
-    return;
+   rte_pause(); 
+   return;
 }
 
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 	
+        rte_pause();
+        return; 
+
+// Do it after in another separate function
+	int num_eaxc = xranlib->get_num_eaxc();
+	int num_eaxc_ul = xranlib->get_num_eaxc_ul();
+	uint32_t xran_max_antenna_nr = RTE_MAX(num_eaxc, num_eaxc_ul);
+
 	if(status!=XRAN_STATUS_SUCCESS){
 		return;
 	}
@@ -439,7 +452,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 		
 		// Loop over the symbols
 		// for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
-		for(uint8_t ant_id = 0; ant_id < 7; ant_id++){
+		for(uint8_t ant_id = 0; ant_id < xran_max_antenna_nr; ant_id++){ // just to try
 			
 			uint32_t nElementLenInBytes = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nElementLenInBytes;
 			uint32_t nNumberOfElements = p_xran_dev_ctx->sFrontHaulRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nNumberOfElements;
@@ -473,7 +486,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
                                 printf("start_sym_id=%d\n",prb_map_buffer.start_sym_id);
                                 printf("nPrbElm=%d\n",prb_map_buffer.nPrbElm);
 */
-                                // printf("symbol_id %d, antenna_id %d \n\n",symb_id,ant_id);
+                                //printf("Rx callback symbol_id %d, antenna_id %d \n\n",symb_id,ant_id);
                         }
 			
 		}
@@ -493,7 +506,7 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 // Sofia for Romain: I try to develop a function that fills in the Tx buffer beforee the xran start as done in sample app.
 //
 
-void fill_in_tx_buffer(xranLibWraper *xranlib){
+void fill_in_tx_buffer(){
    
    // ----
    // Read the valies from the json configuration file using the xran_lib_wrapper functions:
@@ -502,11 +515,7 @@ void fill_in_tx_buffer(xranLibWraper *xranlib){
    int  num_eAxc_   = xranlib->get_num_eaxc(); 
    
    printf("numCCPorts_ =%d, num_eAxc_=%d, MAX_ANT_CARRIER_SUPPORTED =%d\n",numCCPorts_,num_eAxc_,MAX_ANT_CARRIER_SUPPORTED);
-  /* int num_eaxc_ul = xranlib->get_num_eaxc_ul();
-   uint32_t xran_max_antenna_nr = RTE_MAX(num_eaxc, num_eaxc_ul); 
-   
-   int32_t flowId_max = num_eAxc_ * numCCPorts_ + xran_max_antenna_nr; 
-  */
+ 
    int i;
    char *IQ_filename[MAX_ANT_CARRIER_SUPPORTED];
    for(i=0; i<MAX_ANT_CARRIER_SUPPORTED; i++){
@@ -519,6 +528,12 @@ void fill_in_tx_buffer(xranLibWraper *xranlib){
           IQ_filename[i] = "";
       }
    }
+   uint32_t number_slots =  40;                        // According to wrapper.hpp  uint32_t m_nSlots = 10; but for the file 5MHz is set to 40 
+   uint32_t numerology   =  xranlib->get_numerology(); // According to the conf file is mu number
+   uint32_t bandwidth    =  5;                         // According to the wrapper.hpp since we are reading the 5MHz files
+   uint32_t sub6         =  xranlib->get_sub6(); 
+   iq_playback_buffer_size_dl = (number_slots * N_SYM_PER_SLOT * N_SC_PER_PRB * xranlib->get_num_rbs(numerology,bandwidth,sub6)*4L);   
+   // iq_playback_buffer_size_dl = 672000;
    // ----
    // List of variables we are using to fill in the tx buffer
    // ----
@@ -529,6 +544,7 @@ void fill_in_tx_buffer(xranLibWraper *xranlib){
    // app/src/common.h: extern int iq_playback_buffer_size_dl
    // app/src/common.h: #define PRACH_PLAYBACK_BUFFER_BYTES (144*14*4L)
    // app/src/common.h: int  sys_load_file_to_buff(char *filename, char *bufname, unsigned char *pBuffer, unsigned int size, unsigned int buffers_num);
+ 
    for(i = 0; i < MAX_ANT_CARRIER_SUPPORTED && i < (uint32_t)(numCCPorts_ * num_eAxc_); i++) {
 	if(((uint8_t *)IQ_filename[i])[0]!=0){
 
@@ -559,8 +575,16 @@ void fill_in_tx_buffer(xranLibWraper *xranlib){
    return;
 } 
 
+
+int physide_dl_tti_call_back(void * param)
+{
+    rte_pause();
+    return 0;
+}
+
+
 int main(int argc, char *argv[]){
-	xranLibWraper *xranlib;	
+		
 	xranlib = new xranLibWraper;
         /*struct xran_fh_config *pCfg = nullptr;
         if ( xranlib->Init(pCfg) < 0 ){
@@ -578,16 +602,13 @@ int main(int argc, char *argv[]){
         }
         
         printf("\n\n>>> Call fill_in_tx_buffer() function\n");
-        fill_in_tx_buffer(xranlib);
+        fill_in_tx_buffer();
         sleep(5);
         printf(">>> fill_in_tx_buffer() Done\n");
-/*
-        printf(">>> Call Init() function\n");
-	xranlib->Init();
-        printf(">>> Init() function Done\n");
-*/      
-//        send_intermediate_buffer_symbol_test(xranlib);
 
+        // Sofia, Roman enable xran_reg_physide_cb(xranHandle, physide_dl_tti_call_back, NULL, 10, XRAN_CB_TTI); for the CP
+        xran_reg_physide_cb(xranlib->get_xranhandle(), physide_dl_tti_call_back, NULL, 10, XRAN_CB_TTI);
+        
         printf("\n\n>>> Call Open() function\n");
         xranlib->Open(NULL, 
                       nullptr, 
@@ -597,13 +618,27 @@ int main(int argc, char *argv[]){
         sleep(5);
 	printf(">>> Open() function Done\n");
 
+        if(xranlib->is_cpenable() == false ){
+           printf("\nCP NOT enabled\n");
+        }else{
+           printf("\nCP IS enabled! Apply CP enable ...\n");
+           if ( xranlib->apply_cpenable(xranlib->is_cpenable()) != 0 ){
+              printf("Error applying CP ... Exit >>>\n");
+              exit(-1);
+           }else{
+              printf("CP applied correctly \n");
+           }
+        }
+
+
         printf("\n\n>>> Call Init() function\n");
         xranlib->Init();
         sleep(5);
         printf(">>> Init() function Done\n");
-        
+
+     
         printf("\n\n>>> Call our send symbol function\n");
-        send_intermediate_buffer_symbol_test(xranlib);
+        send_intermediate_buffer_symbol_test();
         sleep(5);
         printf(">>> Our send symbol function Done\n");
 
@@ -612,7 +647,7 @@ int main(int argc, char *argv[]){
         assert(pCfg != NULL);
         xranlib->get_cfg_fh(pCfg);
         xran_open(xranlib->get_xranhandle(),pCfg);
-        sleep(10);
+        sleep(5);
         printf(">>>  xran_open(xranlib->get_xranhandle(),pCfg); --- DONE \n");
 
 	init_buffer_indexes();
@@ -642,12 +677,14 @@ int main(int argc, char *argv[]){
         }else{
            printf("XRAN IS running\n");
         }
-        
+/*
+// Delete  
         if(xranlib->is_cpenable() == false ){
            printf("CP NOT enabled\n");
         }else{
            printf("CP IS enabled\n");
-        }        
+        }
+*/        
 
         if(xranlib->is_prachenable() == false){ 
            printf("PRACH is NOT enabled\n");
@@ -666,14 +703,13 @@ int main(int argc, char *argv[]){
 //     xran_start(xranHandle);
 
        //printf("Sleep ....\n");
-       //sleep(60);
-/*
+       //sleep(100);
+
 	while(!escape_flag){
-		
 		//send_intermediate_buffer_symbol();
 		rte_pause();		
 	}
-*/
+
 
 	xranlib->Stop();
 

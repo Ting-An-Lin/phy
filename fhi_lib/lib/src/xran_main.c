@@ -1067,6 +1067,7 @@ void tx_cp_dl_cb(struct rte_timer *tim, void *arg)
     num_eAxc    = xran_get_num_eAxc(pHandle);
     num_CCPorts = xran_get_num_cc(pHandle);
 
+    //printf("Roman tx_cp_dl_cb. first_call=%d, enableCP=%d\n",first_call,p_xran_dev_ctx->enableCP);
     if(first_call && p_xran_dev_ctx->enableCP) {
 
         tti = pTCtx[(xran_lib_ota_tti & 1) ^ 1].tti_to_process;
@@ -1082,6 +1083,7 @@ void tx_cp_dl_cb(struct rte_timer *tim, void *arg)
 
         ctx_id      = XranGetSlotNum(tti, SLOTS_PER_SYSTEMFRAME) % XRAN_MAX_SECTIONDB_CTX;
 
+       // printf("Roman [%d]SFN %d sf %d slot %d\n", tti, frame_id, subframe_id, slot_id);
         print_dbg("[%d]SFN %d sf %d slot %d\n", tti, frame_id, subframe_id, slot_id);
         for(ant_id = 0; ant_id < num_eAxc; ++ant_id) {
             for(cc_id = 0; cc_id < num_CCPorts; cc_id++ ) {
@@ -1309,6 +1311,8 @@ void tti_to_phy_cb(struct rte_timer *tim, void *arg)
             uint32_t slot_id     = XranGetSlotNum(tti, SLOTNUM_PER_SUBFRAME);
             uint32_t subframe_id = XranGetSubFrameNum(tti,SLOTNUM_PER_SUBFRAME,  SUBFRAMES_PER_SYSTEMFRAME);
             uint32_t frame_id = XranGetFrameNum(tti,xran_getSfnSecStart(),SUBFRAMES_PER_SYSTEMFRAME, SLOTNUM_PER_SUBFRAME);
+            
+            printf("Roman: frame_id=%d, xran_max_frame=%d, subframe_id=%d, slot_id=%d\n",frame_id,xran_max_frame,subframe_id,slot_id);
             if((frame_id == xran_max_frame)&&(subframe_id==9)&&(slot_id == SLOTNUM_PER_SUBFRAME-1)) {  //(tti == xran_fs_get_max_slot()-1)
                 first_call = 1;
             }
@@ -2147,6 +2151,7 @@ int32_t xran_process_tx_sym_cp_off(uint8_t ctx_id, uint32_t tti, int32_t cc_id, 
         } /* RU mode or C-Plane is not used */
     }
 
+    //exit(-1); // Roman to try if sample app pass by here
     return retval;
 }
 
@@ -2263,6 +2268,7 @@ xran_attach_up_ext_buf(int8_t* p_ext_buff_start, int8_t* p_ext_buff, uint16_t ex
 int32_t xran_process_tx_sym_cp_on(uint8_t ctx_id, uint32_t tti, int32_t cc_id, int32_t ant_id, uint32_t frame_id, uint32_t subframe_id,
     uint32_t slot_id, uint32_t sym_id)
 {
+    //printf("Roman: enter cp_on\n");
     int32_t     retval = 0;
 
     struct rte_mbuf *eth_oran_hdr = NULL;
@@ -2295,8 +2301,10 @@ int32_t xran_process_tx_sym_cp_on(uint8_t ctx_id, uint32_t tti, int32_t cc_id, i
 
     next = 0;
     num_sections = xran_cp_getsize_section_info(pHandle, direction, cc_id, ant_id, ctx_id);
+    
     /* iterate C-Plane configuration to generate corresponding U-Plane */
     while(next < num_sections) {
+        //printf("Roman: cp_on num_sections=%d, cc_id=%d, ant_id=%d, ctx_id=%d, next=%d\n",num_sections,cc_id,ant_id,ctx_id,next);
         sectinfo = xran_cp_iterate_section_info(pHandle, direction, cc_id, ant_id, ctx_id, &next);
 
         if(sectinfo == NULL)
@@ -2405,7 +2413,8 @@ int32_t xran_process_tx_sym_cp_on(uint8_t ctx_id, uint32_t tti, int32_t cc_id, i
         p_xran_dev_ctx->tx_mbufs[0].len = 0;
         retval = 1;
     } /* while(section) */
-
+   // printf("Roman: exit cp_on: %d\n",retval);
+  // exit(-1); // Roman to try if pass by here 
     return retval;
 }
 
