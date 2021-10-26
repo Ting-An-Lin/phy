@@ -1300,9 +1300,11 @@ void tti_to_phy_cb(struct rte_timer *tim, void *arg)
     if (first_call){
         if(p_xran_dev_ctx->ttiCb[XRAN_CB_TTI]){
             if(p_xran_dev_ctx->SkipTti[XRAN_CB_TTI] <= 0){
+                //printf("Sofia: call ttiCb\n");
                 p_xran_dev_ctx->ttiCb[XRAN_CB_TTI](p_xran_dev_ctx->TtiCbParam[XRAN_CB_TTI]);
             }else{
                 p_xran_dev_ctx->SkipTti[XRAN_CB_TTI]--;
+                //printf("Sofia: p_xran_dev_ctx->SkipTti[XRAN_CB_TTI_%d] =%d\n",XRAN_CB_TTI,p_xran_dev_ctx->SkipTti[XRAN_CB_TTI]);
             }
         }
     } else {
@@ -1312,7 +1314,7 @@ void tti_to_phy_cb(struct rte_timer *tim, void *arg)
             uint32_t subframe_id = XranGetSubFrameNum(tti,SLOTNUM_PER_SUBFRAME,  SUBFRAMES_PER_SYSTEMFRAME);
             uint32_t frame_id = XranGetFrameNum(tti,xran_getSfnSecStart(),SUBFRAMES_PER_SYSTEMFRAME, SLOTNUM_PER_SUBFRAME);
             
-            printf("Roman: frame_id=%d, xran_max_frame=%d, subframe_id=%d, slot_id=%d\n",frame_id,xran_max_frame,subframe_id,slot_id);
+            //printf("Roman: frame_id=%d, xran_max_frame=%d, subframe_id=%d, slot_id=%d\n",frame_id,xran_max_frame,subframe_id,slot_id);
             if((frame_id == xran_max_frame)&&(subframe_id==9)&&(slot_id == SLOTNUM_PER_SUBFRAME-1)) {  //(tti == xran_fs_get_max_slot()-1)
                 first_call = 1;
             }

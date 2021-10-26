@@ -87,7 +87,7 @@ int32_t xran_ethdi_mbuf_send(struct rte_mbuf *mb, uint16_t ethertype, uint16_t v
     mb->port = ctx->io_cfg.port[vf_id];
     xran_add_eth_hdr_vlan(&ctx->entities[vf_id][ID_O_RU], ethertype, mb);
     
-    printf("Sofia check pass xran_ethdi_mbuf_send to DPDK User Plane \n");    
+    //printf("Sofia check pass xran_ethdi_mbuf_send to DPDK User Plane \n");    
 
     res = xran_enqueue_mbuf(mb, ctx->tx_ring[vf_id]);
     return res;
@@ -99,10 +99,10 @@ int32_t xran_ethdi_mbuf_send_cp(struct rte_mbuf *mb, uint16_t ethertype, uint16_
     int res = 0;
 
     mb->port = ctx->io_cfg.port[vf_id];
-    printf("Sofia A) check pass xran_ethdi_mbuf_send to DPDK Control Plane. vfid=%d ID_RU=%d\n",vf_id,ID_O_RU);
+    //printf("Sofia A) check pass xran_ethdi_mbuf_send to DPDK Control Plane. vfid=%d ID_RU=%d\n",vf_id,ID_O_RU);
     xran_add_eth_hdr_vlan(&ctx->entities[vf_id][ID_O_RU], ethertype, mb);
 
-    printf("Sofia B) check pass xran_ethdi_mbuf_send to DPDK Control Plane \n");
+    //printf("Sofia B) check pass xran_ethdi_mbuf_send to DPDK Control Plane \n");
 
     res = xran_enqueue_mbuf(mb, ctx->tx_ring[vf_id]);
     return res;

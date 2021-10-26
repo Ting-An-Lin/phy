@@ -597,14 +597,14 @@ public:
         int bitnum_ccid     = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_EAXCID, "bit_ccId");
         int bitnum_ruport   = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_EAXCID, "bit_ruPortId");
 
-        m_xranInit.eAxCId_conf.bit_cuPortId       = bitnum_bandsec + bitnum_ccid + bitnum_ruport;
-        m_xranInit.eAxCId_conf.bit_bandSectorId   = bitnum_ccid + bitnum_ruport;
-        m_xranInit.eAxCId_conf.bit_ccId           = bitnum_ruport;
+        m_xranInit.eAxCId_conf.bit_cuPortId       = 12;//bitnum_bandsec + bitnum_ccid + bitnum_ruport;
+        m_xranInit.eAxCId_conf.bit_bandSectorId   = 8; //bitnum_ccid + bitnum_ruport;
+        m_xranInit.eAxCId_conf.bit_ccId           = 4; //bitnum_ruport;
         m_xranInit.eAxCId_conf.bit_ruPortId       = 0;
-        m_xranInit.eAxCId_conf.mask_cuPortId      = get_eaxcid_mask(bitnum_cuport, m_xranInit.eAxCId_conf.bit_cuPortId);
-        m_xranInit.eAxCId_conf.mask_bandSectorId  = get_eaxcid_mask(bitnum_bandsec, m_xranInit.eAxCId_conf.bit_bandSectorId);
-        m_xranInit.eAxCId_conf.mask_ccId          = get_eaxcid_mask(bitnum_ccid, m_xranInit.eAxCId_conf.bit_ccId);
-        m_xranInit.eAxCId_conf.mask_ruPortId      = get_eaxcid_mask(bitnum_ruport, m_xranInit.eAxCId_conf.bit_ruPortId);
+        m_xranInit.eAxCId_conf.mask_cuPortId      = 0xf000; //get_eaxcid_mask(bitnum_cuport, m_xranInit.eAxCId_conf.bit_cuPortId);
+        m_xranInit.eAxCId_conf.mask_bandSectorId  = 0x0f00; //get_eaxcid_mask(bitnum_bandsec, m_xranInit.eAxCId_conf.bit_bandSectorId);
+        m_xranInit.eAxCId_conf.mask_ccId          = 0x00f0; //get_eaxcid_mask(bitnum_ccid, m_xranInit.eAxCId_conf.bit_ccId);
+        m_xranInit.eAxCId_conf.mask_ruPortId      = 0x000f; //get_eaxcid_mask(bitnum_ruport, m_xranInit.eAxCId_conf.bit_ruPortId);
 
         m_xranInit.totalBfWeights   = get_globalcfg<int>(XRAN_UT_KEY_GLOBALCFG_RU, "totalBfWeights");
 
@@ -629,9 +629,9 @@ public:
         m_xranInit.enableCP         = 1;
         //m_xranInit.enableCP         = 0;    // Sofia try to modify 
         //m_xranInit.prachEnable      = 1;
-        m_xranInit.prachEnable      = 0;   // Sofia modify according to sample app log 
-        //m_xranInit.debugStop        = 0; // Sofia Modify according to sample app log
-        m_xranInit.debugStop        = 1;   // Sofia Modify according to sample app log
+        m_xranInit.prachEnable      = 1;   // Sofia modify according to sample app log 
+        m_xranInit.debugStop        = 0; // Sofia Modify according to sample app log
+        //m_xranInit.debugStop        = 1;   // Sofia Modify according to sample app log
         m_xranInit.debugStopCount   = 0;
         m_xranInit.DynamicSectionEna= 0;
 
@@ -784,7 +784,7 @@ public:
             m_nSectorIndex[i] = i;
 
         /* set to maximum length to support multiple cases */
-        m_nFpgaToSW_FTH_RxBufferLen     = 13168; /* 273*12*4 + 64*/
+         m_nFpgaToSW_FTH_RxBufferLen     = 13168; /* 273*12*4 + 64*/
         #if 0
         // Sofia: According to sample app this is not the max length. We should also include the spacce for ORAN and ETH Heaaders
            m_nSW_ToFpga_FTH_TxBufferLen    = 13168; /* 273*12*4 + 64*/
@@ -794,6 +794,7 @@ public:
                         sizeof(struct xran_ecpri_hdr) +
                         sizeof(struct radio_app_common_hdr) +
                         sizeof(struct data_section_hdr));
+printf("Sofia wrapper.hpp: nFpgaToSW_FTH_RxBufferLen=%d , nSW_ToFpga_FTH_TxBufferLen=%d\n",m_nFpgaToSW_FTH_RxBufferLen,m_nSW_ToFpga_FTH_TxBufferLen);        
 
         if(init_memory() < 0) {
             std::cout << "Fatal Error on Initialization !!!" << std::endl;
