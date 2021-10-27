@@ -47,12 +47,27 @@ int  callback_tags_to_read_index=-1;
 // index of read tags
 int callback_tags_already_read_index=-1;
 
+// Calback Tags buffer
+xran_cb_tag prach_callback_tags_buffer[CALLBACK_TAGS_BUFFER_LEN];
+// index of tags to read
+int prach_callback_tags_to_read_index=-1;
+// index of read tags
+int prach_callback_tags_already_read_index=-1;
+
+
 // Intermediate Buffer
 uint8_t symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][SYMBOL_DATA_SIZE];
 // Intermediate Buffer Write Index
 int write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 // Intermediate Buffer Read Index
 int read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+
+// Intermediate Buffer
+uint8_t prach_symbol_data_buffer[XRAN_MAX_SECTOR_NR][XRAN_MAX_ANTENNA_NR][SYMBOL_BUFFER_LEN][PRACH_PLAYBACK_BUFFER_BYTES];
+// Intermediate Buffer Write Index
+int prach_write_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
+// Intermediate Buffer Read Index
+int prach_read_symbol_in_symbol_data_buffer[XRAN_MAX_SECTOR_NR];
 
 // Index in TX buffer of the previous symbol sent
 int previous_sent_symbol[XRAN_MAX_SECTOR_NR];
@@ -64,7 +79,9 @@ struct xran_device_ctx *p_xran_dev_ctx_2;
 // while loop escape flag
 int escape_flag;
 
-long RX_bytes=0;
+long RX_bytes=0L;
+
+long RX_bytes_prach=0L;
 
 xranLibWraper *xranlib;
 
@@ -79,6 +96,9 @@ void init_buffer_indexes(){
 		write_symbol_in_symbol_data_buffer[cell_id]=0;
 		read_symbol_in_symbol_data_buffer[cell_id]=0;
 		previous_sent_symbol[cell_id]=0;
+		prach_write_symbol_in_symbol_data_buffer[cell_id]=0;
+		prach_read_symbol_in_symbol_data_buffer[cell_id]=0;
+
 	}
 	
 }
@@ -420,13 +440,22 @@ void send_intermediate_buffer_symbol(){
 }
 
 void xran_fh_srs_callback(void *pCallbackTag, xran_status_t status){
-    rte_pause();
-    return;
+	rte_pause();
+	return;
 }
 
 void xran_fh_rx_prach_callback(void *pCallbackTag, xran_status_t status){
-   rte_pause(); 
-   return;
+
+	
+	if(status!=XRAN_STATUS_SUCCESS){
+		return;
+	}
+
+	prach_callback_tags_to_read_index=(prach_callback_tags_to_read_index+1)%CALLBACK_TAGS_BUFFER_LEN;
+	prach_callback_tags_buffer[prach_callback_tags_to_read_index]=*((xran_cb_tag *)pCallbackTag);
+
+	rte_pause(); 
+	return;
 }
 
 void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
@@ -441,6 +470,74 @@ void xran_fh_rx_callback(void *pCallbackTag, xran_status_t status){
 
         rte_pause();
         return;
+}
+
+void xran_fh_rx_prach_shared_buffer(){
+
+
+	// Do it after in another separate function
+	int num_eaxc = xranlib->get_num_eaxc();
+	int num_eaxc_ul = xranlib->get_num_eaxc_ul();
+	uint32_t xran_max_antenna_nr = RTE_MAX(num_eaxc, num_eaxc_ul);
+
+	if(prach_callback_tags_to_read_index==prach_callback_tags_already_read_index){
+		return;
+	}
+
+	// pCallbackTag is a structure which contains the timing and the cell id
+	prach_callback_tags_already_read_index=(prach_callback_tags_already_read_index+1)%CALLBACK_TAGS_BUFFER_LEN;
+	struct xran_cb_tag *pTag = &prach_callback_tags_buffer[prach_callback_tags_already_read_index];
+
+	uint16_t cell_id = pTag->cellId;
+	uint32_t tti = pTag->slotiId;
+	uint32_t symbol = pTag->symbol;
+	
+	// Retrieve the device context which contains information to access the buffer
+	p_xran_dev_ctx = xran_dev_get_ctx();
+	
+	/* The slot and the cell id are fixed
+	 * We also know the start symbol and that we have to read half a slot
+	 */
+	// Loop over the antennas
+	for(uint32_t symb_id = 0; symb_id<XRAN_NUM_OF_SYMBOL_PER_SLOT; symb_id++){
+		
+		// Loop over the symbols
+		// for(uint8_t ant_id = 0; ant_id < XRAN_MAX_ANTENNA_NR; ant_id++){
+		for(uint8_t ant_id = 0; ant_id < xran_max_antenna_nr; ant_id++){ // just to try
+			
+			uint32_t nElementLenInBytes = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nElementLenInBytes;
+			uint32_t nNumberOfElements = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nNumberOfElements;
+			uint32_t nOffsetInBytes = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nOffsetInBytes;
+			//uint32_t nIsPhyAddr = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].nIsPhyAddr;
+			uint8_t *pData = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pData;
+			void *pCtrl = p_xran_dev_ctx->sFHPrachRxBbuIoBufCtrl[tti % XRAN_N_FE_BUF_LEN][cell_id][ant_id].sBufferList.pBuffers[symb_id%XRAN_NUM_OF_SYMBOL_PER_SLOT].pCtrl;
+			
+			// Copy data to Intermediate Buffer
+			int16_t payload_len=0;
+			if(PRACH_PLAYBACK_BUFFER_BYTES<nElementLenInBytes){
+				payload_len=PRACH_PLAYBACK_BUFFER_BYTES;
+			}else{
+				payload_len=nElementLenInBytes;
+			}
+			uint32_t *dst=(uint32_t *)prach_symbol_data_buffer[cell_id][ant_id][prach_write_symbol_in_symbol_data_buffer[cell_id]];
+			uint32_t *src=(uint32_t *)pData;
+                        rte_memcpy(dst, src, payload_len);
+
+			for(int index=0; index<100; index++){
+				if(dst[index]!=0)
+					RX_bytes_prach++;
+			}
+
+		}
+
+		// Increment Intermediate Buffer Index
+		prach_write_symbol_in_symbol_data_buffer[cell_id]=prach_write_symbol_in_symbol_data_buffer[cell_id]+1;
+		if (prach_write_symbol_in_symbol_data_buffer[cell_id]==SYMBOL_BUFFER_LEN){
+			prach_write_symbol_in_symbol_data_buffer[cell_id]=0;
+		}
+
+	}
+	return;
 }
 
 void xran_fh_rx_read_shared_buffer(){ 
@@ -755,7 +852,10 @@ int main(int argc, char *argv[]){
 		
                 // Call the function that reads the RX buffers
 		xran_fh_rx_read_shared_buffer(); 
+		xran_fh_rx_prach_shared_buffer();
  		printf("RX_bytes=%d\n",RX_bytes);
+		printf("RX_bytes_prach=%d\n",RX_bytes_prach);
+
  		
 		// Compiute the statistics
 		
