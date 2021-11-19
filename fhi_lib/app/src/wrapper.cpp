@@ -857,7 +857,7 @@ int main(int argc, char *argv[]){
 		printf("RX_bytes_prach=%d\n",RX_bytes_prach);
 
  		
-		// Compiute the statistics
+		// Compute the statistics
 		
 		if(xran_get_common_counters(xranlib->get_xranhandle(), &x_counters) == XRAN_STATUS_SUCCESS) {
 			xran_get_time_stats(&nTotalTime, &nUsedTime, &nCoreUsed, 1);
